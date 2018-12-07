@@ -36,11 +36,11 @@ class Menusider extends Component {
                     selectedKeys={[this.state.current]}
                     mode="inline"
                 >
-                    <SubMenu key="sub1" title={<span><Icon type="mail" /><span>fasdgsd</span></span>}>
-                        <Menu.Item key="1"><Link to='/'>Option 1</Link></Menu.Item>
-                        <Menu.Item key="2"><Link to='/about'>Option 2</Link></Menu.Item>
-                        <Menu.Item key="3">Option 3</Menu.Item>
-                        <Menu.Item key="4">Option 4</Menu.Item>
+                    <SubMenu key="sub1" title={<span><Icon type="mail" />思学行动态<span>fasdgsd</span></span>}>
+                        <Menu.Item key="1"><Link to='/'>新闻资讯</Link></Menu.Item>
+                        <Menu.Item key="2"><Link to='/industryDynamic'>行业动态</Link></Menu.Item>
+                        <Menu.Item key="3"><Link to='/stuDynamic'>学员动态</Link></Menu.Item>
+                        {/*<Menu.Item key="4">Option 4</Menu.Item>*/}
                     </SubMenu>
                     <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>Navigtion Two</span></span>}>
                         <Menu.Item key="5">Option 5</Menu.Item>
