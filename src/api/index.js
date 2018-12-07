@@ -10,3 +10,13 @@ export const GETNEWSLIST=HOST+'/dynamic/showNewsInfoList'
  * @type {string}
  */
 export const DELETE=HOST+'/dynamic/delDynamic';
+/**
+ * 编辑界面数据
+ * @type {string}
+ */
+export const EDIT=HOST+'/dynamic/queryDynamic';
+/**
+ * 更新数据
+ * @type {string}
+ */
+export const UPDATE=HOST+'/dynamic/updateDynamic';
