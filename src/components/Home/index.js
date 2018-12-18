@@ -1,212 +1,166 @@
-import React, { Component } from 'react';
-import * as API from '../../api'
-import axios from 'axios'
-import { Card,Button, Form, Input, Tooltip, Cascader, Select, Row, Col, Checkbox,Table ,Icon,Alert,Modal,Pagination} from 'antd';
-const FormItem = Form.Item;
-const Option = Select.Option;
-
+import React, {Component} from 'react';
+import {Button, Card, Table, Divider, Tag, Pagination,Modal } from "antd";
+import {connect} from 'react-redux'
+import * as actionCreators from '../home/store/actionCreators'
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 class Home extends Component {
     state={
-        status:false,
-        newsList:[],
-        editList:[],
         visible: false,
-        editStatus:false
+        content: ''
+    }
+
+    componentDidMount(){
+        this.props.getNewsList(1,1,10)
+    }
+
+    /*shouldComponentUpdate(nextProps, nextState) {
+        return this.props.newsList !== nextProps.newsList;
+    }*/
+
+    render() {
+        const columns = [{
+            title: '标题',
+            dataIndex: 'title',
+            width: 350,
+            render: text => <a href="javascript:;">{text}</a>,
+        }, {
+            title: '内容',
+            dataIndex: 'content',
+            width: 350,
+            render: text => <div>{text.substring(0,200)+'......'}</div>,
+        }, {
+            title: '创建时间',
+            dataIndex: 'createTime',
+        }, {
+            title: '展示图片',
+            dataIndex: 'image',
+            width:200,
+            render: url => <img src={url} style={{width:'200px',height:'200px'}}/>,
+        }, {
+            title: '分类名称',
+            dataIndex: 'typeName',
+        }, {
+            title: '操作',
+            dataIndex: 'make',
+            render: (text, record) => {
+                return (
+                    <span>
+                  <Button type="dashed">修改</Button>
+                  <Divider type="vertical" />
+                  <Button type="danger">删除</Button>
+                </span>
+                )
+            },
+        }];
+        const data = [{
+            key: '1',
+            title: 'John Brown',
+            age: 32,
+            address: 'New York No. 1 Lake Park',
+        }, {
+            key: '2',
+            title: 'Jim Green',
+            age: 42,
+            address: 'London No. 1 Lake Park',
+        }, {
+            key: '3',
+            title: 'Joe Black',
+            age: 32,
+            address: 'Sidney No. 1 Lake Park',
+        }, {
+            key: '4',
+            title: 'Disabled User',
+            age: 99,
+            address: 'Sidney No. 1 Lake Park',
+            make :<Button type="dashed" className='primary'>修改</Button>,
+        }];
+        // rowSelection object indicates the need for row selection
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            },
+            getCheckboxProps: record => ({
+                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                name: record.name,
+            }),
+        };
+        const modules = {
+            toolbar: [
+                [{ 'header': [1, 2, false] }],
+                ['bold', 'italic', 'underline','strike', 'blockquote'],
+                [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+                ['link', 'image'],
+                ['clean']
+            ],
+        }
+        const  formats = [
+                'header',
+                'bold', 'italic', 'underline', 'strike', 'blockquote',
+                'list', 'bullet', 'indent',
+                'link', 'image'
+        ]
+        return (
+            <div>
+                <Modal title="Basic Modal" visible={this.state.visible}
+                       onOk={this.handleOk} onCancel={this.handleCancel}
+                       className='modal-container'
+                >
+                   <ReactQuill value={this.state.content}
+                               onChange={this.handleChange}
+                               modules={modules}
+                   />
+
+                </Modal>
+                <Card title="新闻资讯">
+                    <Button type="primary" className='primary' onClick={()=>{this.showModal()}}>新增</Button>
+                    <Button type="dashed" className='primary'>修改</Button>
+                    <Button type="danger">删除</Button>
+                </Card>
+                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList?this.props.newsList:''} rowKey={this.props.newsList.id} pagination={false} />
+                <Pagination onChange={(page,pageSize)=>{
+                    this.props.getNewsList(1,page,pageSize)
+                }} defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
+            </div>
+        );
     }
     showModal = () => {
         this.setState({
             visible: true,
         });
     }
-    handleOk = (e) => {
-        console.log(e);
+    handleOk = () => {
+        let { content }=this.state
+        let body={
+            typeId:1,
+            content
+        }
+        this.props.uploadEditor(body)
+        this.setState({visible: false});
+    }
+    handleCancel = () => {
         this.setState({
             visible: false,
         });
     }
-    componentDidMount(){
-        this.getNewsList(1,10)
-    }
-    componentDidUpdate(){
-        // this.getNewsList()
-    }
-    getNewsList=(page,pageSize)=>{
-        console.log(page,'******************')
-        axios.get(API.GETNEWSLIST+'?typeId=1&page='+page+'&size='+pageSize+'').then(res=>{
-            if(res.data.success){
-                this.setState({newsList:res.data.dynamics})
-            }
-        }).catch(err=>{
-            console.log(err)
-        })
-    }
-    /*显示编辑界面*/
-    edit=(id)=>{
-        console.log(id)
-        axios.get(API.EDIT+'?id='+id).then(res=>{
-            if(res.data.success){
-                this.setState({
-                    editList:res.data.dynamic,
-                    id:res.data.dynamic.id,
-                    title:res.data.dynamic.title,
-                    typeId:res.data.dynamic.typeId,
-                    content:res.data.dynamic.content,
-                    image:res.data.dynamic.image,
-                    createTime:res.data.dynamic.createTime,
-                },()=>{
-                    let {title,typeId,content,image,createTime} = this.state.editList;
-                    this.title.value=title
-                    this.typeId.value=typeId
-                    this.content.value=content
-                    this.image.value=image
-                    this.createTime.value=createTime
-                });
-        }
-    }).catch(err=>{
-        console.log(err);
-    })}
 
-    handleEditOk=()=>{
-        this.setState({editStatus:true})
+    handleChange=(value)=>{
+        this.setState({ content: value })
     }
-    handleCancel = () => {
-        this.setState({ editStatus: false });
-    }
-    commitInfo=()=>{
-        const {id,title,typeId,image,content,createTime}=this.state
-        axios.post(API.UPDATE+'/',{
-            id,
-            title,
-            typeId,
-            content,
-            createTime,
-            image
-        }).then(res=>{
-            if(res.data.success){
-                this.setState({editStatus:false});
-            }
-        }).catch(err=>{
-            console.log(err);
-        })
-    }
-    handleChange=()=>{
-        this.setState({
-            title:this.title,
-            typeId:this.typeId,
-            image:this.image,
-            content:this.content,
-            createTime:this.createTime,
-        })
-    }
-    render(){
-        /*复选框中编辑和删除按钮*/
-        const rowSelection = {
-            /*删除记录*/
-            del:(id)=>{
-                let bool=confirm('确认删除?')
-                if(bool){
-                    axios.delete(API.DELETE+'?id='+id).then(res=>{
-                        if(res.data.success){
-                            // alert("删除成功!");
-                            this.setState({visible:true});
-                        }
-                    }).catch(err=>{
-                        console.log(err)
-                    })
-                }
 
-            },
-
-        };
-        const columns = [{
-            title: '标题',
-            dataIndex: 'title',
-            key: 'title',
-        }, {
-            title: '内容',
-            dataIndex: 'content',
-            key: 'content',
-        }, {
-            title: '创建时间',
-            dataIndex: 'createTime',
-            key: 'createTime'
-        }, {
-            title: '图片地址',
-            dataIndex: 'image',
-            key: 'image',
-        },{
-            title: '操作',
-            dataIndex: 'createTime',
-            key: 'make',
-            /*按钮*/
-            render: (text, record) => (
-                <div className="box">
-                    <Button type="dashed" style={{
-                        marginRight:'15px'
-                    }} onClick={()=>{
-                        this.edit(record.id)
-                        this.handleEditOk()
-                    }}>编辑</Button>
-                    <Button type="danger" onClick={()=>{rowSelection.del(record.id)}}>删除</Button>
-                </div>
-            ),
-        },];
-        let { status,newsList }=this.state
-        return (
-            <div>
-                <Modal title="修改信息" visible={this.state.editStatus}
-                       onCancel={()=>this.handleCancel()}
-                       onOk={()=>this.commitInfo()}
-                >
-                    <div>
-                        <form >
-                            <div className="box" >
-                                <input type="hidden"/>
-                                <label>标题：</label><input type="text" placeholder='title' style={{width:'100%'}} ref={(refs)=>this.title=refs} onChange={()=>{this.handleChange()}}/><br/>
-                                <input type="text" placeholder='typeId' style={{width:'100%'}} ref={(refs)=>this.typeId=refs} onChange={()=>{this.handleChange()}}/><br/>
-                                <label>分类：</label><br/>
-                                <select name="typeId" ref={(refs)=>this.typeId=refs} >
-                                    <option value="1" selected="selected">新闻资讯</option>
-                                    <option value="2">行业动态</option>
-                                    <option value="3">学员动态</option>
-                                </select><br/>
-                                <label>内容：</label><input type="text" placeholder='content' style={{width:'100%'}} ref={(refs)=>this.content=refs} onChange={()=>{this.handleChange()}}/><br/>
-                                <label>图片：</label><input type="text" placeholder='image' style={{width:'100%'}}  ref={(refs)=>this.image=refs} onChange={()=>{this.handleChange()}}/><br/>
-                                <label>创建时间：</label><input type="text" placeholder='createTime' style={{width:'100%'}} ref={(refs)=>this.createTime=refs} onChange={()=>{this.handleChange()}}/>
-                            </div>
-                        </form>
-                    </div>
-                </Modal>
-                <Card title="新闻资讯">
-                    {/*新增按钮*/}
-                    <Button type="primary" onClick={()=>{this.handleAdd()}}>新增</Button><br/><br/>
-                    {/*插入表格*/}
-                    {console.log(this.state.editList.id,'************')}
-                    <Table rowSelection={rowSelection} columns={columns} dataSource={newsList}pagination={false}/>
-                    {/*操作提示*/}
-                    <div>
-                        <Modal title="提示" visible={this.state.visible}
-                               onOk={this.handleOk}
-                        >
-                            <p>操作成功!</p>
-                        </Modal>
-                    </div>
-                    <Pagination defaultCurrent={1} total={50} style={{float:'right'}} onChange={(page, pageSize)=>{
-                        // this.handleSizeChnage(current, size)
-                        this.getNewsList(page,pageSize);
-                    }}/>
-                </Card>
-
-            </div>
-        )
-    }
-    handleAdd=()=>{
-        this.setState({status:true})
-    }
-    handleSelect=(e)=>{
-        console.log(e.target.value)
-
-    }
 }
 
-export default Home;
+const mapStateToProps=(state)=>({
+    newsList:state.home.newsList
+})
+
+const mapDispatchToProps=(dispatch)=>({
+    getNewsList(id,page,pageSize){
+        dispatch(actionCreators.getNewsList(id,page,pageSize))
+    },
+    uploadEditor(body){
+        dispatch(actionCreators.uploadEditor(body))
+    }
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(Home);
