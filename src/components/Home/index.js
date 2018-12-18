@@ -11,7 +11,9 @@ class Home extends Component {
     }
 
     componentDidMount(){
-        this.props.getNewsList(1,1,10)
+        if (!this.props.newsList.length) {
+            this.props.getNewsList(1,1,10)
+        }
     }
 
     /*shouldComponentUpdate(nextProps, nextState) {
@@ -23,6 +25,7 @@ class Home extends Component {
             title: '标题',
             dataIndex: 'title',
             width: 350,
+            minWidth:350,
             render: text => <a href="javascript:;">{text}</a>,
         }, {
             title: '内容',
@@ -117,7 +120,7 @@ class Home extends Component {
                     <Button type="dashed" className='primary'>修改</Button>
                     <Button type="danger">删除</Button>
                 </Card>
-                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList?this.props.newsList:''} rowKey={this.props.newsList.id} pagination={false} />
+                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
                     this.props.getNewsList(1,page,pageSize)
                 }} defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />

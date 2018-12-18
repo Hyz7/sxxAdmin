@@ -12,7 +12,7 @@ const upload=(result)=>({
 export const getNewsList=(id,page,pageSize)=>{
     return (dispatch)=>{
         axios.get(Api.GET_NEWS_LIST+'?typeId='+id+'&page='+page+'&size='+pageSize).then(res=>{
-            console.log(res)
+            // let dataSource = new MatTableDataSource(res.data.dynamicList)
             dispatch(getList(res.data.dynamicList))
             // this.dataSource = new MatTableDataSource(res.data.yourSubArray);
         })
@@ -22,7 +22,6 @@ export const getNewsList=(id,page,pageSize)=>{
 export const uploadEditor=(body)=>{
     return (dispatch)=>{
         axios.post(Api.UPLOAD_EDITOR,body).then(res=>{
-            console.log(res)
             dispatch(upload(res.data))
         })
     }
