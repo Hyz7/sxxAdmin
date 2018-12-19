@@ -3,7 +3,8 @@ import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker  }
 import {connect} from 'react-redux'
 import * as actionCreators from '../home/store/actionCreators'
 import ReactQuill from 'react-quill';
-
+import axios from 'axios';
+import * as Api from '../../api'
 import uniqueId from 'lodash/uniqueId'
 const { MonthPicker, RangePicker } = DatePicker;
 class Home extends Component {
@@ -11,6 +12,7 @@ class Home extends Component {
         super(props)
         this.state={
             visible: false,
+            delState:false,
             content: '',
             newsList:[]
         }
@@ -24,7 +26,6 @@ class Home extends Component {
     }
     onChange=(date, dateString) =>{
         this.setState({createTime:dateString})
-
     }
 
     render() {
@@ -58,15 +59,14 @@ class Home extends Component {
             width:300,
             render: (text, record) => {
                 return (
-                    <span>
+                <span>
                   <Button type="dashed">修改</Button>
                   <Divider type="vertical" />
-                  <Button type="danger">删除</Button>
+                  <Button type="danger" onClick={()=>this.showDelete(record.id)}>删除</Button>
                 </span>
                 )
             },
         }];
-        // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -94,7 +94,7 @@ class Home extends Component {
 
         return (
             <div>
-                <Modal title="Basic Modal" visible={this.state.visible}
+                <Modal title="新增页面" visible={this.state.visible}
                        onOk={this.handleOk} onCancel={this.handleCancel}
                        className='modal-container'
                 >
@@ -127,8 +127,13 @@ class Home extends Component {
                 </Modal>
                 <Card title="新闻资讯">
                     <Button type="primary" className='primary' onClick={()=>{this.showModal()}}>新增</Button>
-                    <Button type="danger">删除</Button>
+                    <Button type="danger" >删除</Button>
                 </Card>
+                <Modal title="确认删除" visible={this.state.delState}
+                       onOk={this.confirmDelete} onCancel={this.cancelDelete}
+                >
+                    <p>确认要删除吗?</p>
+                </Modal>
                 <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
                     this.props.getNewsList(1,page,pageSize)
@@ -158,6 +163,33 @@ class Home extends Component {
         })
     }
 
+    //显示删除页面
+    showDelete = (id) =>{
+        this.setState({
+            delState: true,
+            id
+        });
+    }
+    //确认删除
+    confirmDelete = () =>{
+        let id = this.state.id;
+        axios.delete(Api.DELETE+"?id="+id).then((res)=>{
+            if (res.data.success) {
+                alert("删除成功!");
+            }else{
+                alert("删除失败,请联络管理员!");
+            }
+        });
+        this.setState({
+            delState: false,
+        });
+    }
+    //取消删除
+    cancelDelete = () =>{
+        this.setState({
+            delState: false,
+        });
+    }
     showModal = () => {
         this.setState({
             visible: true,
