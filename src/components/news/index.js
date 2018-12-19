@@ -3,27 +3,32 @@ import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker  }
 import {connect} from 'react-redux'
 import * as actionCreators from '../home/store/actionCreators'
 import ReactQuill from 'react-quill';
+import axios from 'axios';
+import * as Api from '../../api'
 import 'react-quill/dist/quill.snow.css';
 import uniqueId from 'lodash/uniqueId'
-
 const { MonthPicker, RangePicker } = DatePicker;
-class Industry extends Component {
+class News extends Component {
     constructor(props){
         super(props)
         this.state={
             visible: false,
+            delState:false,
             content: '',
             newsList:[]
         }
     }
 
     componentDidMount(){
-        this.props.getNewsList(2,1,10)
+        this.props.getNewsList(1,1,10)
     }
     onChange=(date, dateString) =>{
         this.setState({createTime:dateString})
 
     }
+    /*shouldComponentUpdate(nextProps, nextState) {
+        return this.props.newsList !== nextProps.newsList;
+    }*/
 
     render() {
         const columns = [{
@@ -59,7 +64,7 @@ class Industry extends Component {
                     <span>
                   <Button type="dashed">修改</Button>
                   <Divider type="vertical" />
-                  <Button type="danger">删除</Button>
+                  <Button type="danger" onClick={()=>this.showDelete(record.id)}>删除</Button>
                 </span>
                 )
             },
@@ -92,7 +97,7 @@ class Industry extends Component {
 
         return (
             <div>
-                <Modal title="Basic Modal" visible={this.state.visible}
+                <Modal title="新增页面" visible={this.state.visible}
                        onOk={this.handleOk} onCancel={this.handleCancel}
                        className='modal-container'
                 >
@@ -118,18 +123,23 @@ class Industry extends Component {
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div><ReactQuill value={this.state.content}
-                                                                   onChange={this.handleChange}
-                                                                   modules={modules}
-                    />
+                                    onChange={this.handleChange}
+                                    modules={modules}
+                        />
                     </div>
                 </Modal>
                 <Card title="新闻资讯">
                     <Button type="primary" className='primary' onClick={()=>{this.showModal()}}>新增</Button>
-                    <Button type="danger">删除</Button>
+                    <Button type="danger" >删除</Button>
                 </Card>
+                <Modal title="确认删除" visible={this.state.delState}
+                       onOk={this.confirmDelete} onCancel={this.cancelDelete}
+                >
+                    <p>确认要删除吗?</p>
+                </Modal>
                 <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
-                    this.props.getNewsList(2,page,pageSize)
+                    this.props.getNewsList(1,page,pageSize)
                 }}defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
             </div>
         );
@@ -156,6 +166,33 @@ class Industry extends Component {
         })
     }
 
+    //显示删除页面
+    showDelete = (id) =>{
+        this.setState({
+            delState: true,
+            id
+        });
+    }
+    //确认删除
+    confirmDelete = () =>{
+        let id = this.state.id;
+        axios.delete(Api.DELETE+"?id="+id).then((res)=>{
+            if (res.data.success) {
+                alert("删除成功!");
+            }else{
+                alert("删除失败,请联络管理员!");
+            }
+        });
+        this.setState({
+            delState: false,
+        });
+    }
+    //取消删除
+    cancelDelete = () =>{
+        this.setState({
+            delState: false,
+        });
+    }
     showModal = () => {
         this.setState({
             visible: true,
@@ -197,4 +234,4 @@ const mapDispatchToProps=(dispatch)=>({
     }
 })
 
-export default connect(mapStateToProps,mapDispatchToProps)(Industry);
+export default connect(mapStateToProps,mapDispatchToProps)(News);
