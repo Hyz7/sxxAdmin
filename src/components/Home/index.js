@@ -18,7 +18,7 @@ class Home extends Component {
         }
     }
     onChange=(date, dateString) =>{
-        console.log(date, dateString);
+        this.setState({createTime:dateString})
 
     }
     /*shouldComponentUpdate(nextProps, nextState) {
@@ -100,18 +100,20 @@ class Home extends Component {
                     </div>
 
                     <div className="input-box">
-                        <div className="text">创建时间:</div><DatePicker ref={input=>this.timeInput=input} onChange={(date, dateString)=>this.onChange(date, dateString)} />
+                        <div className="text">创建时间:</div><DatePicker onChange={(date, dateString)=>this.onChange(date, dateString)} />
                     </div>
                     <div className="input-box">
                         <div className="text">分类:</div>
-                        <Select placeholder="请选择分类"  className='select'>
-                            <Option value="news">新闻资讯</Option>
-                            <Option value="industry">行业动态</Option>
-                            <Option value="student">学员动态</Option>
-                        </Select>
+                        <select placeholder="请选择分类"  className='select' ref={input=>this.selectInput=input} onChange={()=>{this.inputChange()}}>
+                            <option >--请选择分类--</option>
+                            <option value="1">新闻资讯</option>
+                            <option value="2">行业动态</option>
+                            <option value="3">学员动态</option>
+                        </select>
                     </div>
                     <div className="input-box">
-                        <div className="text">图片:</div><input type="file" className="input-style image" placeholder='上传封面图片'/>
+                        <div className="text">图片:</div>
+                        <form action="" encType="multipart/form-data"><input type="file" className="input-style image" ref={file=>this.imgFile=file} placeholder='上传封面图片' onChange={()=>{this.getImg(this.imgFile)}}/></form>
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div><ReactQuill value={this.state.content}
@@ -125,19 +127,33 @@ class Home extends Component {
                     <Button type="dashed" className='primary'>修改</Button>
                     <Button type="danger">删除</Button>
                 </Card>
-                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
+                {/*<Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />*/}
                 <Pagination onChange={(page,pageSize)=>{
                     this.props.getNewsList(1,page,pageSize)
                 }} defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
             </div>
         );
     }
-    inputChange=(e)=>{
-        console.log(this.timeInput.value)
+    getImg=(fileDom)=>{
+        let file = fileDom.files[0];
+        let imageType = /^image\//;
+        if(!imageType.test(file.type)) {
+            alert("请选择图片！");
+            return;
+        }
+        let formData = new FormData();
+        formData.append('file',fileDom.files[0]);  //添加图片信息的参数
+        console.log(formData)
+        this.setState({
+            imgFile:formData
+        })
+    }
+    inputChange=()=>{
         this.setState({
             title:this.textInput.value,
-            createTime:this.timeInput.value,
-
+            typeName:this.selectInput.value,
+        },()=>{
+            console.log(this.state.typeName);
         })
     }
 
@@ -147,10 +163,13 @@ class Home extends Component {
         });
     }
     handleOk = () => {
-        let { content }=this.state
+        let { content,createTime,title,imgFile }=this.state
         let body={
             typeId:1,
-            content
+            title,
+            content,
+            createTime,
+            image:imgFile
         }
         this.props.uploadEditor(body)
         this.setState({visible: false});
