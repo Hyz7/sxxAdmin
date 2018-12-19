@@ -6,9 +6,10 @@ const getList=(result)=>({
     result,
 })
 const upload=(result)=>({
-    type: actionTypes.GET_NEWS_LIST,
+    type: actionTypes.GET_UPDATE_LIST,
     result,
 })
+
 export const getNewsList=(id,page,pageSize)=>{
     return (dispatch)=>{
         axios.get(Api.GET_NEWS_LIST+'?typeId='+id+'&page='+page+'&size='+pageSize).then(res=>{
@@ -22,7 +23,7 @@ export const getNewsList=(id,page,pageSize)=>{
 export const uploadEditor=(body)=>{
     return (dispatch)=>{
         axios.post(Api.UPLOAD_EDITOR,body).then(res=>{
-            dispatch(upload(res.data))
+            dispatch(upload(res.data.success))
         })
     }
 }

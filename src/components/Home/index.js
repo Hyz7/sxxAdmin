@@ -4,17 +4,22 @@ import {connect} from 'react-redux'
 import * as actionCreators from '../home/store/actionCreators'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
+import uniqueId from 'lodash/uniqueId'
 const { MonthPicker, RangePicker } = DatePicker;
 class Home extends Component {
-    state={
-        visible: false,
-        content: ''
+    constructor(props){
+        super(props)
+        this.state={
+            visible: false,
+            content: '',
+            newsList:[]
+        }
     }
 
     componentDidMount(){
         if (!this.props.newsList.length) {
             this.props.getNewsList(1,1,10)
+            this.setState({newsList:this.props.newsList})
         }
     }
     onChange=(date, dateString) =>{
@@ -89,6 +94,7 @@ class Home extends Component {
             'list', 'bullet', 'indent',
             'link', 'image'
         ]
+
         return (
             <div>
                 <Modal title="Basic Modal" visible={this.state.visible}
@@ -124,13 +130,12 @@ class Home extends Component {
                 </Modal>
                 <Card title="新闻资讯">
                     <Button type="primary" className='primary' onClick={()=>{this.showModal()}}>新增</Button>
-                    <Button type="dashed" className='primary'>修改</Button>
                     <Button type="danger">删除</Button>
                 </Card>
-                {/*<Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />*/}
+                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
                     this.props.getNewsList(1,page,pageSize)
-                }} defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
+                }}defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
             </div>
         );
     }
@@ -143,7 +148,6 @@ class Home extends Component {
         }
         let formData = new FormData();
         formData.append('file',fileDom.files[0]);  //添加图片信息的参数
-        console.log(formData)
         this.setState({
             imgFile:formData
         })
@@ -173,17 +177,16 @@ class Home extends Component {
         }
         this.props.uploadEditor(body)
         this.setState({visible: false});
+
     }
     handleCancel = () => {
         this.setState({
             visible: false,
         });
     }
-
     handleChange=(value)=>{
         this.setState({ content: value })
     }
-
 }
 
 const mapStateToProps=(state)=>({
