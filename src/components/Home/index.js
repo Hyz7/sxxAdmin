@@ -3,7 +3,7 @@ import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker  }
 import {connect} from 'react-redux'
 import * as actionCreators from '../home/store/actionCreators'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+
 import uniqueId from 'lodash/uniqueId'
 const { MonthPicker, RangePicker } = DatePicker;
 class Home extends Component {
@@ -26,9 +26,6 @@ class Home extends Component {
         this.setState({createTime:dateString})
 
     }
-    /*shouldComponentUpdate(nextProps, nextState) {
-        return this.props.newsList !== nextProps.newsList;
-    }*/
 
     render() {
         const columns = [{
@@ -41,7 +38,7 @@ class Home extends Component {
             title: '内容',
             dataIndex: 'content',
             width: 350,
-            render: text => <div>{text.substring(0,200)+'......'}</div>,
+            render: text => <div>{text}</div>,
         }, {
             title: '创建时间',
             dataIndex: 'createTime',

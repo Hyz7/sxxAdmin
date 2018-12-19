@@ -10,7 +10,7 @@ import {Layout} from "antd";
 const { Header, Footer, Sider, Content } = Layout;
 import MyHeader from './common/header'
 import MyFooter from './common/footer'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-quill/dist/quill.snow.css';
 const App=()=>(
     <Provider store={store}>
         <BrowserRouter>

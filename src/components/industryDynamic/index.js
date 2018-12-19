@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker  } from "antd";
 import {connect} from 'react-redux'
-import * as actionCreators from '../home/store/actionCreators'
+import {actionCreators} from './store'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
 import uniqueId from 'lodash/uniqueId'
 
 const { MonthPicker, RangePicker } = DatePicker;
@@ -19,10 +19,11 @@ class Industry extends Component {
 
     componentDidMount(){
         if (!this.props.newsList.length) {
-            this.props.getNewsList(1,1,10)
+            this.props.getNewsList(2,1,10)
             this.setState({newsList:this.props.newsList})
         }
     }
+
     onChange=(date, dateString) =>{
         this.setState({createTime:dateString})
 
@@ -39,7 +40,7 @@ class Industry extends Component {
             title: '内容',
             dataIndex: 'content',
             width: 350,
-            render: text => <div>{text.substring(0,200)+'......'}</div>,
+            render: text => <div>{text}</div>,
         }, {
             title: '创建时间',
             dataIndex: 'createTime',
@@ -59,7 +60,7 @@ class Industry extends Component {
             width:300,
             render: (text, record) => {
                 return (
-                    <span>
+                <span>
                   <Button type="dashed">修改</Button>
                   <Divider type="vertical" />
                   <Button type="danger">删除</Button>
@@ -67,13 +68,13 @@ class Industry extends Component {
                 )
             },
         }];
-        // rowSelection object indicates the need for row selection
+
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
             getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                disabled: record.name === 'Disabled User',
                 name: record.name,
             }),
         };
@@ -86,12 +87,6 @@ class Industry extends Component {
                 ['clean']
             ],
         }
-        const  formats = [
-            'header',
-            'bold', 'italic', 'underline', 'strike', 'blockquote',
-            'list', 'bullet', 'indent',
-            'link', 'image'
-        ]
 
         return (
             <div>
@@ -102,7 +97,6 @@ class Industry extends Component {
                     <div className="input-box">
                         <div className="text">标题:</div><input type="text" className="input-style title" ref={input=>this.textInput=input} onChange={()=>{this.inputChange()}}/>
                     </div>
-
                     <div className="input-box">
                         <div className="text">创建时间:</div><DatePicker onChange={(date, dateString)=>this.onChange(date, dateString)} />
                     </div>
@@ -126,13 +120,13 @@ class Industry extends Component {
                     />
                     </div>
                 </Modal>
-                <Card title="新闻资讯">
+                <Card title="行业动态">
                     <Button type="primary" className='primary' onClick={()=>{this.showModal()}}>新增</Button>
                     <Button type="danger">删除</Button>
                 </Card>
-                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
+                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={()=>uniqueId()} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
-                    this.props.getNewsList(1,page,pageSize)
+                    this.props.getNewsList(2,page,pageSize)
                 }}defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
             </div>
         );
@@ -188,7 +182,7 @@ class Industry extends Component {
 }
 
 const mapStateToProps=(state)=>({
-    newsList:state.home.newsList
+    newsList:state.industry.newsList1
 })
 
 const mapDispatchToProps=(dispatch)=>({
