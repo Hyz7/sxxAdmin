@@ -37,7 +37,7 @@ class Menusider extends Component {
                     mode="inline"
                 >
                     <SubMenu key="sub1" title={<span><Icon type="mail" />思学行动态<span>fasdgsd</span></span>}>
-                        <Menu.Item key="1"><Link to='/'>新闻资讯</Link></Menu.Item>
+                        <Menu.Item key="1"><Link to='/news'>新闻资讯</Link></Menu.Item>
                         <Menu.Item key="2"><Link to='/industryDynamic'>行业动态</Link></Menu.Item>
                         <Menu.Item key="3"><Link to='/stuDynamic'>学员动态</Link></Menu.Item>
                         {/*<Menu.Item key="4">Option 4</Menu.Item>*/}
