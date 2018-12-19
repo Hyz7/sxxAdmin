@@ -3,7 +3,6 @@ import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker  }
 import {connect} from 'react-redux'
 import {actionCreators} from './store'
 import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
 import uniqueId from 'lodash/uniqueId'
 
 const { MonthPicker, RangePicker } = DatePicker;
@@ -37,11 +36,7 @@ class Industry extends Component {
             title: '内容',
             dataIndex: 'content',
             width: 350,
-<<<<<<< HEAD
-            render: text => <div>{text}</div>,
-=======
             render: text => <div>{text?text.length>200?text.substring(0,200)+'......':null:null}</div>,
->>>>>>> 26955554ce37eee4e0f7b92b63eb64a98273d2a1
         }, {
             title: '创建时间',
             dataIndex: 'createTime',
