@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker  } from "antd";
 import {connect} from 'react-redux'
-import * as actionCreators from '../home/store/actionCreators'
+import {actionCreators}  from './store'
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import * as Api from '../../api'
@@ -222,7 +222,7 @@ class News extends Component {
 }
 
 const mapStateToProps=(state)=>({
-    newsList:state.home.newsList
+    newsList:state.news.newsList
 })
 
 const mapDispatchToProps=(dispatch)=>({

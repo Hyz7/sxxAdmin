@@ -21,12 +21,6 @@ class Menusider extends Component {
     render() {
         return (
             <div>
-                {/*<Switch
-                    checked={this.state.theme === 'dark'}
-                    onChange={this.changeTheme}
-                    checkedChildren="Dark"
-                    unCheckedChildren="Light"
-                />*/}
                 <div className="header" style={{height:'64px',color:'#fff',fontSize:'20px',textAlign:'center',lineHeight:'64px'}}>思学行后台管理系统</div>
                 <Menu
                     theme={this.state.theme}

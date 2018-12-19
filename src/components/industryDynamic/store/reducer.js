@@ -1,11 +1,11 @@
 import * as actionTypes from './actionTypes'
 
 const defaultState={
-    newsList1:[]
+    newsList:[]
 }
 
 const getmenulist=(state,action)=>{
-    return Object.assign({},state,{newsList1:action.result})
+    return Object.assign({},state,{newsList:action.result})
 }
 
 const update=(state,action)=>{

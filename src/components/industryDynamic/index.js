@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker  } from "antd";
 import {connect} from 'react-redux'
-import {actionCreators} from './store'
+import { actionCreators } from './store'
 import ReactQuill from 'react-quill';
 import uniqueId from 'lodash/uniqueId'
 
@@ -178,7 +178,7 @@ class Industry extends Component {
 }
 
 const mapStateToProps=(state)=>({
-    newsList:state.industry.newsList1
+    newsList:state.industry.newsList
 })
 
 const mapDispatchToProps=(dispatch)=>({
