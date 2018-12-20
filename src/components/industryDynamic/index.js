@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker,Upload ,Icon,message  } from "antd";
+import {Button, Card, Table, Divider, Pagination,Modal,DatePicker,message  } from "antd";
 import {connect} from 'react-redux'
 import {actionCreators}  from './store'
 import ReactQuill from 'react-quill';
@@ -24,7 +24,6 @@ class Industry extends Component {
     componentDidMount(){
         this.props.getIndustryDynamicList(2,1,10)
     }
-
 
     onChange=(date, dateString)=>{
         this.setState({createTime:dateString})

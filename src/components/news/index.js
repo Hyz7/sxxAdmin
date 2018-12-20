@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 import {actionCreators}  from './store'
 import ReactQuill from 'react-quill';
 import axios from 'axios';
-import UploadImg from '../../common/uploadImg'
 import * as Api from '../../api'
 import 'react-quill/dist/quill.snow.css';
 import uniqueId from 'lodash/uniqueId'
@@ -24,7 +23,6 @@ class News extends Component {
     componentDidMount(){
         this.props.getNewsList(1,1,10)
     }
-
 
     onChange=(date, dateString)=>{
         this.setState({createTime:dateString})
@@ -92,7 +90,7 @@ class News extends Component {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
             getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                disabled: record.name === 'Disabled User',
                 name: record.name,
             }),
         };
@@ -116,6 +114,7 @@ class News extends Component {
             <div>
                 <Modal title="编辑新闻" visible={this.state.UpdateVisible}
                        onOk={this.handleOk} onCancel={this.handleCancel}
+                       className='modal-container'
                 >
                     <div className="input-box">
                         <div className="text">标题:</div><input type="text" defaultValue={this.state.oldTitle} className="input-style title" ref={input=>this.textInput=input} onChange={()=>{this.inputChange()}}/>

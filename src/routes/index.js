@@ -6,7 +6,7 @@ import Student from '../components/stuDynamic'
 export default ()=>(
     <div>
         <Route path='/news' exact component={News}></Route>
-        <Route path='/industryDynamic' exact component={Industry}></Route>
-        <Route path='/stuDynamic' exact component={Student}></Route>
+        <Route path='/industry' component={Industry}></Route>
+        <Route path='/study' component={Student}></Route>
     </div>
 )
