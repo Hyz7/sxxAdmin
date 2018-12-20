@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes'
 import axios from 'axios'
 import * as Api from '../../../api'
 const getList=(result)=>({
-    type: actionTypes.GET_NEWS_LIST,
+    type: actionTypes.GET_STU_DYNAMIC_LIST,
     result,
 })
 const upload=(result)=>({
@@ -10,12 +10,11 @@ const upload=(result)=>({
     result,
 })
 
-export const getNewsList=(id,page,pageSize)=>{
+export const getStuDynamicList=(id,page,pageSize)=>{
     return (dispatch)=>{
         axios.get(Api.GET_NEWS_LIST+'?typeId='+id+'&page='+page+'&size='+pageSize).then(res=>{
-            // let dataSource = new MatTableDataSource(res.data.dynamicList)
+            console.log(res)
             dispatch(getList(res.data.dynamicList))
-            // this.dataSource = new MatTableDataSource(res.data.yourSubArray);
         })
     }
 }

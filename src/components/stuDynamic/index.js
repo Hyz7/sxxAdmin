@@ -16,13 +16,13 @@ class Student extends Component {
             visible: false,
             delState:false,
             content: '',
-            newsList:[],
+            stuDynamicList:[],
             UpdateVisible:false
         }
     }
 
     componentDidMount(){
-        this.props.getNewsList(3,1,10)
+        this.props.getStuDynamicList(3,1,10)
     }
 
 
@@ -173,9 +173,9 @@ class Student extends Component {
                 >
                     <p>确认要删除吗?</p>
                 </Modal>
-                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
+                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.stuDynamicList} rowKey={(stuDynamicList)=>stuDynamicList.id} key={this.props.stuDynamicList.id} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
-                    this.props.getNewsList(3,page,pageSize)
+                    this.props.getStuDynamicList(3,page,pageSize)
                 }}defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
             </div>
         );
@@ -290,12 +290,12 @@ class Student extends Component {
 }
 
 const mapStateToProps=(state)=>({
-    newsList:state.student.newsList
+    stuDynamicList:state.student.stuDynamicList
 })
 
 const mapDispatchToProps=(dispatch)=>({
-    getNewsList(id,page,pageSize){
-        dispatch(actionCreators.getNewsList(id,page,pageSize))
+    getStuDynamicList(id,page,pageSize){
+        dispatch(actionCreators.getStuDynamicList(id,page,pageSize))
     },
     uploadEditor(body){
         dispatch(actionCreators.uploadEditor(body))

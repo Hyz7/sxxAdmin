@@ -1,11 +1,11 @@
 import * as actionTypes from './actionTypes'
 
 const defaultState={
-    newsList:[]
+    stuDynamicList:[]
 }
 
-const getmenulist=(state,action)=>{
-    return Object.assign({},state,{newsList:action.result})
+const getStuDynamicList=(state,action)=>{
+    return Object.assign({},state,{stuDynamicList:action.result})
 }
 
 const update=(state,action)=>{
@@ -13,8 +13,8 @@ const update=(state,action)=>{
 }
 export default (state = defaultState, action)=>{
     switch(action.type){
-        case actionTypes.GET_NEWS_LIST:
-            return getmenulist(state,action)
+        case actionTypes.GET_STU_DYNAMIC_LIST:
+            return getStuDynamicList(state,action)
         case actionTypes.GET_UPDATE_LIST:
             return update(state,action)
         default:
