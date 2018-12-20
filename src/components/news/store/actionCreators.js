@@ -6,9 +6,17 @@ const getList=(result)=>({
     result,
 })
 const upload=(result)=>({
-    type: actionTypes.GET_UPDATE_LIST,
+    type: actionTypes.UPDATE,
     result,
 })
+
+export const uploadUpdate=(updateBody)=>{
+    return (dispatch)=>{
+        axios.post(Api.UPDATE,updateBody).then(res=>{
+            dispatch(upload(res.data.success))
+        })
+    }
+}
 
 export const getNewsList=(id,page,pageSize)=>{
     return (dispatch)=>{
@@ -19,6 +27,8 @@ export const getNewsList=(id,page,pageSize)=>{
         })
     }
 }
+
+
 
 export const uploadEditor=(body)=>{
     return (dispatch)=>{

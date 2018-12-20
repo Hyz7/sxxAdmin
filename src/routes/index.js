@@ -5,7 +5,8 @@ import Industry from '../components/industryDynamic'
 import Student from '../components/stuDynamic'
 export default ()=>(
     <div>
-        <Route path='/news' exact component={News}></Route>
+        <Route exact path="/" render={() => <Redirect to="/news" push />} />
+        <Route path='/news' component={News}></Route>
         <Route path='/industry' component={Industry}></Route>
         <Route path='/study' component={Student}></Route>
     </div>

@@ -1,7 +1,8 @@
 import * as actionTypes from './actionTypes'
 
 const defaultState={
-    newsList:[]
+    newsList:[],
+    update:''
 }
 
 const getmenulist=(state,action)=>{
@@ -11,11 +12,16 @@ const getmenulist=(state,action)=>{
 const update=(state,action)=>{
     return Object.assign({},state,{update:action.result})
 }
+/*const updateBody=()=>{
+    return Object.assign({},state,{update:action.result})
+}*/
 export default (state = defaultState, action)=>{
     switch(action.type){
         case actionTypes.GET_NEWS_LIST:
             return getmenulist(state,action)
-        case actionTypes.GET_UPDATE_LIST:
+        /*case actionTypes.GET_UPDATE_LIST:
+            return update(state,action)*/
+        case actionTypes.UPDATE:
             return update(state,action)
         default:
             return state

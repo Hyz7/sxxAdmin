@@ -113,7 +113,7 @@ class News extends Component {
         return (
             <div>
                 <Modal title="编辑新闻" visible={this.state.UpdateVisible}
-                       onOk={this.handleOk} onCancel={this.handleCancel}
+                       onOk={()=>this.handleOk(id)} onCancel={this.handleCancel}
                        className='modal-container'
                 >
                     <div className="input-box">
@@ -244,7 +244,7 @@ class News extends Component {
             visible: true,
         });
     }
-    handleOk = () => {
+    handleOk = (id) => {
         let { content,createTime,title,image }=this.state
         let body={
             typeId:1,
@@ -253,7 +253,16 @@ class News extends Component {
             createTime,
             image,
         }
+        let updateBody={
+            typeId:1,
+            id,
+            title,
+            content,
+            createTime,
+            image,
+        }
         this.props.uploadEditor(body)
+        this.props.uploadUpdate(updateBody)
         this.setState({visible: false,image:''});
 
     }
@@ -280,6 +289,9 @@ const mapDispatchToProps=(dispatch)=>({
     },
     uploadEditor(body){
         dispatch(actionCreators.uploadEditor(body))
+    },
+    uploadUpdate(updateBody){
+        dispatch(actionCreators.uploadUpdate(updateBody))
     }
 })
 
