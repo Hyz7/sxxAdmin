@@ -127,8 +127,13 @@ class News extends Component {
 
                     <div className="input-box">
                         <div className="text">图片:</div>
-                        <img src={this.state.oldImage} alt="" style={{width:'100px',height:'100px'}}/>
-                        <input accept="image/*" name="img" type="file" id='update-img' onChange={()=>{this.getImgEditor()}}/>
+                        <div className="img-box">
+                            <img src={this.state.image||this.state.oldImage} alt=""/>
+                            <input accept="image/*" name="img" id="upload_file" type="file"
+                                   onChange={()=>{this.getImg(this.updateImage)}}
+                                   ref={img=>this.updateImage=img}
+                            />
+                        </div>
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div>
@@ -152,8 +157,11 @@ class News extends Component {
                     <div className="input-box">
                         <div className="text">图片:</div>
                         <div className="img-box">
-                            <img src="" alt=""/>
-                            <input accept="image/*" name="img" id="upload_file" type="file" onChange={()=>{this.getImg()}}/> 
+                            <img src={this.state.image} alt=""/>
+                            <input accept="image/*" name="img" id="upload_file" type="file"
+                                   onChange={()=>{this.getImg(this.addImage)}}
+                                   ref={img=>this.addImage=img}
+                            />
                         </div>
                         
                     </div>
@@ -191,8 +199,8 @@ class News extends Component {
         }
         return isJPG && isLt2M;
     }
-    getImg=()=>{
-        let file = document.getElementById("upload_file").files[0];
+    getImg=(dom)=>{
+        let file = dom.files[0];
         if(this.beforeUpload(file)){
             let r = new FileReader();  //本地预览
             r.onload = ()=>{
@@ -247,13 +255,14 @@ class News extends Component {
             image,
         }
         this.props.uploadEditor(body)
-        this.setState({visible: false});
+        this.setState({visible: false,image:''});
 
     }
     handleCancel = () => {
         this.setState({
             visible: false,
-            UpdateVisible:false
+            UpdateVisible:false,
+            image:''
         });
     }
 
