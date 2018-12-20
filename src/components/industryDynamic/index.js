@@ -16,13 +16,13 @@ class Industry extends Component {
             visible: false,
             delState:false,
             content: '',
-            newsList:[],
+            industryDynamicList:[],
             UpdateVisible:false
         }
     }
 
     componentDidMount(){
-        this.props.getNewsList(2,1,10)
+        this.props.getIndustryDynamicList(2,1,10)
     }
 
 
@@ -173,9 +173,9 @@ class Industry extends Component {
                 >
                     <p>确认要删除吗?</p>
                 </Modal>
-                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
+                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.industryDynamicList} rowKey={(industryDynamicList)=>industryDynamicList.id} key={this.props.industryDynamicList.id} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
-                    this.props.getNewsList(2,page,pageSize)
+                    this.props.getIndustryDynamicList(2,page,pageSize)
                 }}defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
             </div>
         );
@@ -290,12 +290,12 @@ class Industry extends Component {
 }
 
 const mapStateToProps=(state)=>({
-    newsList:state.industry.newsList
+    industryDynamicList:state.industry.industryDynamicList
 })
 
 const mapDispatchToProps=(dispatch)=>({
-    getNewsList(id,page,pageSize){
-        dispatch(actionCreators.getNewsList(id,page,pageSize))
+    getIndustryDynamicList(id,page,pageSize){
+        dispatch(actionCreators.getIndustryDynamicList(id,page,pageSize))
     },
     uploadEditor(body){
         dispatch(actionCreators.uploadEditor(body))
