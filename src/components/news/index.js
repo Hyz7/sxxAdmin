@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker  } from "antd";
+import {Button, Card, Table, Divider, Tag, Pagination,Modal,Select,DatePicker,Upload ,Icon,message  } from "antd";
 import {connect} from 'react-redux'
 import {actionCreators}  from './store'
 import ReactQuill from 'react-quill';
 import axios from 'axios';
+import UploadImg from '../../common/uploadImg'
 import * as Api from '../../api'
 import 'react-quill/dist/quill.snow.css';
 import uniqueId from 'lodash/uniqueId'
@@ -15,20 +16,36 @@ class News extends Component {
             visible: false,
             delState:false,
             content: '',
-            newsList:[]
+            newsList:[],
+            UpdateVisible:false
         }
     }
 
     componentDidMount(){
         this.props.getNewsList(1,1,10)
     }
-    onChange=(date, dateString) =>{
-        this.setState({createTime:dateString})
 
+
+    onChange=(date, dateString)=>{
+        this.setState({createTime:dateString})
     }
-    /*shouldComponentUpdate(nextProps, nextState) {
-        return this.props.newsList !== nextProps.newsList;
-    }*/
+
+    handleUpdate=(content)=>{
+        this.setState({
+            UpdateVisible:true,
+            oldTitle:content.title,
+            oldContent:content.content,
+            oldCreateTime:content.createTime,
+        })
+    }
+
+    getImgBase64=(imageUrl)=>{
+        this.setState({
+            imageUrl:imageUrl
+        },()=>{
+            console.log(this.state.imageUrl)
+        })
+    }
 
     render() {
         const columns = [{
@@ -61,15 +78,14 @@ class News extends Component {
             width:300,
             render: (text, record) => {
                 return (
-                    <span>
-                  <Button type="dashed">修改</Button>
+                <span>
+                  <Button type="dashed" onClick={()=>this.handleUpdate(record)}>编辑</Button>
                   <Divider type="vertical" />
                   <Button type="danger" onClick={()=>this.showDelete(record.id)}>删除</Button>
                 </span>
                 )
             },
         }];
-        // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -97,7 +113,31 @@ class News extends Component {
 
         return (
             <div>
-                <Modal title="新增页面" visible={this.state.visible}
+                <Modal title="编辑新闻" visible={this.state.UpdateVisible}
+                       onOk={this.handleOk} onCancel={this.handleCancel}
+                >
+                    <div className="input-box">
+                        <div className="text">标题:</div><input type="text" defaultValue={this.state.oldTitle} className="input-style title" ref={input=>this.textInput=input} onChange={()=>{this.inputChange()}}/>
+                    </div>
+
+                    <div className="input-box">
+                        <div className="text">创建时间:</div><DatePicker defaultValue={this.state.createTime} onChange={(date, dateString)=>this.onChange(date, dateString)} />
+                    </div>
+
+                    <div className="input-box">
+                        <div className="text">图片:</div>
+                        {/*<form action="" encType="multipart/form-data"><input type="file" className="input-style image" ref={file=>this.imgFile=file} placeholder='上传封面图片' onChange={()=>{this.getImg(this.imgFile)}}/></form>*/}
+                        <UploadImg />
+                    </div>
+                    <div className="input-box">
+                        <div className="text">内容:</div>
+                        <ReactQuill value={this.state.content}
+                            onChange={this.handleChange}
+                            modules={modules}
+                    />
+                    </div>
+                </Modal>
+                <Modal title="新增新闻" visible={this.state.visible}
                        onOk={this.handleOk} onCancel={this.handleCancel}
                        className='modal-container'
                 >
@@ -109,17 +149,10 @@ class News extends Component {
                         <div className="text">创建时间:</div><DatePicker onChange={(date, dateString)=>this.onChange(date, dateString)} />
                     </div>
                     <div className="input-box">
-                        <div className="text">分类:</div>
-                        <select placeholder="请选择分类"  className='select' ref={input=>this.selectInput=input} onChange={()=>{this.inputChange()}}>
-                            <option >--请选择分类--</option>
-                            <option value="1">新闻资讯</option>
-                            <option value="2">行业动态</option>
-                            <option value="3">学员动态</option>
-                        </select>
-                    </div>
-                    <div className="input-box">
                         <div className="text">图片:</div>
-                        <form action="" encType="multipart/form-data"><input type="file" className="input-style image" ref={file=>this.imgFile=file} placeholder='上传封面图片' onChange={()=>{this.getImg(this.imgFile)}}/></form>
+                        {/*<form action="" encType="multipart/form-data"><input type="file" className="input-style image" ref={file=>this.imgFile=file} placeholder='上传封面图片' onChange={()=>{this.getImg(this.imgFile)}}/></form>*/}
+                        {/*<UploadImg ref={content=>this.upload=content} getImgBase64={()=>this.getImgBase64()}/>*/}
+                        <input accept="image/*" name="img" id="upload_file" type="file" onChange={()=>{this.getImg()}}/>
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div><ReactQuill value={this.state.content}
@@ -144,25 +177,36 @@ class News extends Component {
             </div>
         );
     }
-    getImg=(fileDom)=>{
-        let file = fileDom.files[0];
-        let imageType = /^image\//;
-        if(!imageType.test(file.type)) {
-            alert("请选择图片！");
-            return;
+    beforeUpload=(file)=> {
+        const isJPG = file.type === 'image/jpeg'||'image/png';
+        if (!isJPG) {
+            message.error('You can upload JPG or PNG file!');
         }
-        let formData = new FormData();
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error('Image must smaller than 2MB!');
+        }
+        return isJPG && isLt2M;
+    }
+    getImg=()=>{
+        let file = document.getElementById("upload_file").files[0];
+        if(this.beforeUpload(file)){
+            let r = new FileReader();  //本地预览
+            r.onload = ()=>{
+                this.setState({image:r.result});//图片的base64
+            }
+            r.readAsDataURL(file);    //Base64
+        }
+
+        /*let formData = new FormData();
         formData.append('file',fileDom.files[0]);  //添加图片信息的参数
         this.setState({
             imgFile:formData
-        })
+        })*/
     }
     inputChange=()=>{
         this.setState({
-            title:this.textInput.value,
-            typeName:this.selectInput.value,
-        },()=>{
-            console.log(this.state.typeName);
+            title:this.textInput.value
         })
     }
 
@@ -199,13 +243,13 @@ class News extends Component {
         });
     }
     handleOk = () => {
-        let { content,createTime,title,imgFile }=this.state
+        let { content,createTime,title,image }=this.state
         let body={
             typeId:1,
             title,
             content,
             createTime,
-            image:imgFile
+            image,
         }
         this.props.uploadEditor(body)
         this.setState({visible: false});
@@ -214,8 +258,10 @@ class News extends Component {
     handleCancel = () => {
         this.setState({
             visible: false,
+            UpdateVisible:false
         });
     }
+
     handleChange=(value)=>{
         this.setState({ content: value })
     }

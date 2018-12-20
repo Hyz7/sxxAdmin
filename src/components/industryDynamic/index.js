@@ -22,7 +22,6 @@ class Industry extends Component {
 
     onChange=(date, dateString) =>{
         this.setState({createTime:dateString})
-
     }
 
     render() {
@@ -57,7 +56,7 @@ class Industry extends Component {
             render: (text, record) => {
                 return (
                 <span>
-                  <Button type="dashed">修改</Button>
+                  <Button type="dashed">编辑</Button>
                   <Divider type="vertical" />
                   <Button type="danger">删除</Button>
                 </span>
