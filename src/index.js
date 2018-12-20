@@ -24,7 +24,7 @@ const App=()=>(
                             <MyHeader />
                         </Header>
                         <Content>
-                            <Route path='/' component={ MainRoutes }></Route>
+                            <Route path='/news' component={ MainRoutes }></Route>
                         </Content>
                         <Footer>
                             <MyFooter />

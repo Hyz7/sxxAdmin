@@ -36,6 +36,7 @@ class News extends Component {
             oldTitle:content.title,
             oldContent:content.content,
             oldCreateTime:content.createTime,
+            oldImage:content.image
         })
     }
 
@@ -121,17 +122,17 @@ class News extends Component {
                     </div>
 
                     <div className="input-box">
-                        <div className="text">创建时间:</div><DatePicker defaultValue={this.state.createTime} onChange={(date, dateString)=>this.onChange(date, dateString)} />
+                        <div className="text">创建时间:</div><DatePicker placeholder={this.state.oldCreateTime} onChange={(date, dateString)=>this.onChange(date, dateString)} />
                     </div>
 
                     <div className="input-box">
                         <div className="text">图片:</div>
-                        {/*<form action="" encType="multipart/form-data"><input type="file" className="input-style image" ref={file=>this.imgFile=file} placeholder='上传封面图片' onChange={()=>{this.getImg(this.imgFile)}}/></form>*/}
-                        <UploadImg />
+                        <img src={this.state.oldImage} alt="" style={{width:'100px',height:'100px'}}/>
+                        <input accept="image/*" name="img" type="file" id='update-img' onChange={()=>{this.getImgEditor()}}/>
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div>
-                        <ReactQuill value={this.state.content}
+                        <ReactQuill  value={this.state.content}
                             onChange={this.handleChange}
                             modules={modules}
                     />
@@ -150,9 +151,11 @@ class News extends Component {
                     </div>
                     <div className="input-box">
                         <div className="text">图片:</div>
-                        {/*<form action="" encType="multipart/form-data"><input type="file" className="input-style image" ref={file=>this.imgFile=file} placeholder='上传封面图片' onChange={()=>{this.getImg(this.imgFile)}}/></form>*/}
-                        {/*<UploadImg ref={content=>this.upload=content} getImgBase64={()=>this.getImgBase64()}/>*/}
-                        <input accept="image/*" name="img" id="upload_file" type="file" onChange={()=>{this.getImg()}}/>
+                        <div className="img-box">
+                            <img src="" alt=""/>
+                            <input accept="image/*" name="img" id="upload_file" type="file" onChange={()=>{this.getImg()}}/> 
+                        </div>
+                        
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div><ReactQuill value={this.state.content}
@@ -172,13 +175,13 @@ class News extends Component {
                 </Modal>
                 <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
-                    this.props.getNewsList(1,page,pageSize)
+                    this.setState({page:page},()=>{this.props.getNewsList(1,this.state.page,pageSize)})
                 }}defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
             </div>
         );
     }
     beforeUpload=(file)=> {
-        const isJPG = file.type === 'image/jpeg'||'image/png';
+        const isJPG = file.type === 'image/jpeg' || 'image/png';
         if (!isJPG) {
             message.error('You can upload JPG or PNG file!');
         }
@@ -197,12 +200,6 @@ class News extends Component {
             }
             r.readAsDataURL(file);    //Base64
         }
-
-        /*let formData = new FormData();
-        formData.append('file',fileDom.files[0]);  //添加图片信息的参数
-        this.setState({
-            imgFile:formData
-        })*/
     }
     inputChange=()=>{
         this.setState({
@@ -227,9 +224,7 @@ class News extends Component {
                 alert("删除失败,请联络管理员!");
             }
         });
-        this.setState({
-            delState: false,
-        });
+        this.setState({delState: false});
     }
     //取消删除
     cancelDelete = () =>{
