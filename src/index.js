@@ -11,11 +11,13 @@ const { Header, Footer, Sider, Content } = Layout;
 import MyHeader from './common/header'
 import MyFooter from './common/footer'
 import 'react-quill/dist/quill.snow.css';
+import Login from "./components/login";
 
 const App=()=>(
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
+                <Route path='/login' component={Login}></Route>
                 <Layout>
                     <Sider className='sider-container'>
                         <Menusider />
