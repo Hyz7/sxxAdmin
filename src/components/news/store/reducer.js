@@ -22,6 +22,7 @@ export default (state = defaultState, action)=>{
         /*case actionTypes.GET_UPDATE_LIST:
             return update(state,action)*/
         case actionTypes.UPDATE:
+            alert('修改成功！')
             return update(state,action)
         default:
             return state

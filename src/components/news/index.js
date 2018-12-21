@@ -31,8 +31,9 @@ class News extends Component {
     handleUpdate=(content)=>{
         this.setState({
             UpdateVisible:true,
+            id:content.id,
             oldTitle:content.title,
-            oldContent:content.content,
+            content:content.content,
             oldCreateTime:content.createTime,
             oldImage:content.image
         })
@@ -113,7 +114,7 @@ class News extends Component {
         return (
             <div>
                 <Modal title="编辑新闻" visible={this.state.UpdateVisible}
-                       onOk={()=>this.handleOk(id)} onCancel={this.handleCancel}
+                       onOk={()=>this.handleOk(this.state.id)} onCancel={this.handleCancel}
                        className='modal-container'
                 >
                     <div className="input-box">
@@ -128,7 +129,7 @@ class News extends Component {
                         <div className="text">图片:</div>
                         <div className="img-box">
                             <img src={this.state.image||this.state.oldImage} alt=""/>
-                            <input accept="image/*" name="img" id="upload_file" type="file"
+                            <input accept="image/*" name="img"  type="file"
                                    onChange={()=>{this.getImg(this.updateImage)}}
                                    ref={img=>this.updateImage=img}
                             />
@@ -231,14 +232,18 @@ class News extends Component {
                 alert("删除失败,请联络管理员!");
             }
         });
-        this.setState({delState: false});
+        this.setState({
+            delState: false
+        });
     }
+
     //取消删除
     cancelDelete = () =>{
         this.setState({
             delState: false,
         });
     }
+
     showModal = () => {
         this.setState({
             visible: true,
@@ -261,16 +266,25 @@ class News extends Component {
             createTime,
             image,
         }
-        this.props.uploadEditor(body)
-        this.props.uploadUpdate(updateBody)
-        this.setState({visible: false,image:''});
+        if(!id){
+            this.props.uploadEditor(body)
+        }else{
+            this.props.uploadUpdate(updateBody)
+        }
+        this.setState({
+            UpdateVisible:false,
+            visible: false,
+            image:'',
+            content:''
+        });
 
     }
     handleCancel = () => {
         this.setState({
             visible: false,
             UpdateVisible:false,
-            image:''
+            image:'',
+            content:''
         });
     }
 

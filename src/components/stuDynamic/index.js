@@ -129,8 +129,13 @@ class Student extends Component {
 
                     <div className="input-box">
                         <div className="text">图片:</div>
-                        {/*<form action="" encType="multipart/form-data"><input type="file" className="input-style image" ref={file=>this.imgFile=file} placeholder='上传封面图片' onChange={()=>{this.getImg(this.imgFile)}}/></form>*/}
-                        <UploadImg />
+                        <div className="img-box">
+                            <img src={this.state.image||this.state.oldImage} alt=""/>
+                            <input accept="image/*" name="img"  type="file"
+                                   onChange={()=>{this.getImg(this.updateImage)}}
+                                   ref={img=>this.updateImage=img}
+                            />
+                        </div>
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div>
