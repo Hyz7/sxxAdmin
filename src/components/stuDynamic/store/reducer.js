@@ -1,11 +1,15 @@
 import * as actionTypes from './actionTypes'
 
 const defaultState={
-    stuDynamicList:[]
+    stuDynamicList:[],
+    update:''
 }
 
 const getStuDynamicList=(state,action)=>{
-    return Object.assign({},state,{stuDynamicList:action.result})
+    return Object.assign({},state,{
+        stuDynamicList:action.result.dynamicList,
+        pageResult:action.result.pageResult.total,
+    })
 }
 
 const update=(state,action)=>{
@@ -15,7 +19,8 @@ export default (state = defaultState, action)=>{
     switch(action.type){
         case actionTypes.GET_STU_DYNAMIC_LIST:
             return getStuDynamicList(state,action)
-        case actionTypes.GET_UPDATE_LIST:
+        case actionTypes.UPDATE:
+            alert('修改成功！')
             return update(state,action)
         default:
             return state

@@ -33,7 +33,7 @@ class News extends Component {
             UpdateVisible:true,
             id:content.id,
             oldTitle:content.title,
-            content:content.content,
+            content:content.html,
             oldCreateTime:content.createTime,
             oldImage:content.image
         })
@@ -114,7 +114,7 @@ class News extends Component {
         return (
             <div>
                 <Modal title="编辑新闻" visible={this.state.UpdateVisible}
-                       onOk={()=>this.handleOk(this.state.id)} onCancel={this.handleCancel}
+                       onOk={()=>this.handleUpdateOk(this.state.id)} onCancel={this.handleCancel}
                        className='modal-container'
                 >
                     <div className="input-box">
@@ -163,7 +163,7 @@ class News extends Component {
                                    ref={img=>this.addImage=img}
                             />
                         </div>
-                        
+
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div><ReactQuill value={this.state.content}
@@ -184,7 +184,7 @@ class News extends Component {
                 <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
                     this.setState({page:page},()=>{this.props.getNewsList(1,this.state.page,pageSize)})
-                }}defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
+                }} defaultCurrent={1} total={this.props.pageResult} style={{float:'right',marginTop:'20px'}} />
             </div>
         );
     }
@@ -225,13 +225,27 @@ class News extends Component {
     //确认删除
     confirmDelete = () =>{
         let id = this.state.id;
-        axios.delete(Api.DELETE+"?id="+id).then((res)=>{
-            if (res.data.success) {
-                alert("删除成功!");
-            }else{
-                alert("删除失败,请联络管理员!");
-            }
-        });
+        if (id!=null){
+            axios.delete(Api.DELETE+"?id="+id).then((res)=>{
+                if (res.data.success) {
+                    alert("删除成功!");
+                    this.props.getNewsList(1,1,10);
+                }else{
+                    alert("删除失败,请联络管理员!");
+                }
+            });
+        } else {
+            let ids = this.state.delIds;
+            axios.delete(Api.DELETE+"?id="+ids).then((res)=>{
+                if (res.data.success) {
+                    alert("删除成功!");
+                    this.props.getNewsList(1,1,10);
+                }else{
+                    alert("删除失败,请联络管理员!");
+                }
+            });
+
+        }
         this.setState({
             delState: false
         });
@@ -249,15 +263,8 @@ class News extends Component {
             visible: true,
         });
     }
-    handleOk = (id) => {
+    handleUpdateOk=(id)=>{
         let { content,createTime,title,image }=this.state
-        let body={
-            typeId:1,
-            title,
-            content,
-            createTime,
-            image,
-        }
         let updateBody={
             typeId:1,
             id,
@@ -266,11 +273,25 @@ class News extends Component {
             createTime,
             image,
         }
-        if(!id){
-            this.props.uploadEditor(body)
-        }else{
-            this.props.uploadUpdate(updateBody)
+        this.props.uploadUpdate(updateBody)
+        this.setState({
+            UpdateVisible:false,
+            visible: false,
+            image:'',
+            content:''
+        });
+    }
+    handleOk = () => {
+        let { content,createTime,title,image }=this.state
+        let body={
+            typeId:1,
+            title,
+            content,
+            createTime,
+            image,
         }
+        this.props.uploadEditor(body)
+
         this.setState({
             UpdateVisible:false,
             visible: false,
@@ -294,7 +315,8 @@ class News extends Component {
 }
 
 const mapStateToProps=(state)=>({
-    newsList:state.news.newsList
+    newsList:state.news.newsList,
+    pageResult:state.news.pageResult
 })
 
 const mapDispatchToProps=(dispatch)=>({

@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 import {actionCreators}  from './store'
 import ReactQuill from 'react-quill';
 import axios from 'axios';
-import UploadImg from '../../common/uploadImg'
 import * as Api from '../../api'
 import 'react-quill/dist/quill.snow.css';
 import uniqueId from 'lodash/uniqueId'
@@ -25,7 +24,6 @@ class Student extends Component {
         this.props.getStuDynamicList(3,1,10)
     }
 
-
     onChange=(date, dateString)=>{
         this.setState({createTime:dateString})
     }
@@ -33,9 +31,11 @@ class Student extends Component {
     handleUpdate=(content)=>{
         this.setState({
             UpdateVisible:true,
+            id:content.id,
             oldTitle:content.title,
-            oldContent:content.content,
+            content:content.html,
             oldCreateTime:content.createTime,
+            oldImage:content.image
         })
     }
 
@@ -89,12 +89,10 @@ class Student extends Component {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-                this.setState({
-                    delIds:selectedRowKeys,
-                })
+                this.setState({delIds:selectedRowKeys});
             },
             getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                disabled: record.name === 'Disabled User',
                 name: record.name,
             }),
         };
@@ -117,14 +115,15 @@ class Student extends Component {
         return (
             <div>
                 <Modal title="编辑新闻" visible={this.state.UpdateVisible}
-                       onOk={this.handleOk} onCancel={this.handleCancel}
+                       onOk={()=>this.handleUpdateOk(this.state.id)} onCancel={this.handleCancel}
+                       className='modal-container'
                 >
                     <div className="input-box">
                         <div className="text">标题:</div><input type="text" defaultValue={this.state.oldTitle} className="input-style title" ref={input=>this.textInput=input} onChange={()=>{this.inputChange()}}/>
                     </div>
 
                     <div className="input-box">
-                        <div className="text">创建时间:</div><DatePicker defaultValue={this.state.createTime} onChange={(date, dateString)=>this.onChange(date, dateString)} />
+                        <div className="text">创建时间:</div><DatePicker placeholder={this.state.oldCreateTime} onChange={(date, dateString)=>this.onChange(date, dateString)} />
                     </div>
 
                     <div className="input-box">
@@ -139,9 +138,9 @@ class Student extends Component {
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div>
-                        <ReactQuill value={this.state.content}
-                                    onChange={this.handleChange}
-                                    modules={modules}
+                        <ReactQuill  value={this.state.content}
+                                     onChange={this.handleChange}
+                                     modules={modules}
                         />
                     </div>
                 </Modal>
@@ -158,9 +157,14 @@ class Student extends Component {
                     </div>
                     <div className="input-box">
                         <div className="text">图片:</div>
-                        {/*<form action="" encType="multipart/form-data"><input type="file" className="input-style image" ref={file=>this.imgFile=file} placeholder='上传封面图片' onChange={()=>{this.getImg(this.imgFile)}}/></form>*/}
-                        {/*<UploadImg ref={content=>this.upload=content} getImgBase64={()=>this.getImgBase64()}/>*/}
-                        <input accept="image/*" name="img" id="upload_file" type="file" onChange={()=>{this.getImg()}}/>
+                        <div className="img-box">
+                            <img src={this.state.image} alt=""/>
+                            <input accept="image/*" name="img" id="upload_file" type="file"
+                                   onChange={()=>{this.getImg(this.addImage)}}
+                                   ref={img=>this.addImage=img}
+                            />
+                        </div>
+
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div><ReactQuill value={this.state.content}
@@ -171,7 +175,7 @@ class Student extends Component {
                 </Modal>
                 <Card title="学员动态">
                     <Button type="primary" className='primary' onClick={()=>{this.showModal()}}>新增</Button>
-                    <Button type="danger" onClick={()=>{this.batchDelete(this.state.delIds)}} >删除</Button>
+                    <Button type="danger" onClick={()=>{this.batchDelete()}}>删除</Button>
                 </Card>
                 <Modal title="确认删除" visible={this.state.delState}
                        onOk={this.confirmDelete} onCancel={this.cancelDelete}
@@ -180,13 +184,13 @@ class Student extends Component {
                 </Modal>
                 <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.stuDynamicList} rowKey={(stuDynamicList)=>stuDynamicList.id} key={this.props.stuDynamicList.id} pagination={false} />
                 <Pagination onChange={(page,pageSize)=>{
-                    this.props.getStuDynamicList(3,page,pageSize)
-                }}defaultCurrent={1} total={50} style={{float:'right',marginTop:'20px'}} />
+                    this.setState({page:page},()=>{this.props.getStuDynamicList(3,this.state.page,pageSize)})
+                }}defaultCurrent={1} total={this.props.pageResult} style={{float:'right',marginTop:'20px'}} />
             </div>
         );
     }
     beforeUpload=(file)=> {
-        const isJPG = file.type === 'image/jpeg'||'image/png';
+        const isJPG = file.type === 'image/jpeg' || 'image/png';
         if (!isJPG) {
             message.error('You can upload JPG or PNG file!');
         }
@@ -196,8 +200,8 @@ class Student extends Component {
         }
         return isJPG && isLt2M;
     }
-    getImg=()=>{
-        let file = document.getElementById("upload_file").files[0];
+    getImg=(dom)=>{
+        let file = dom.files[0];
         if(this.beforeUpload(file)){
             let r = new FileReader();  //本地预览
             r.onload = ()=>{
@@ -205,26 +209,19 @@ class Student extends Component {
             }
             r.readAsDataURL(file);    //Base64
         }
-
-        /*let formData = new FormData();
-        formData.append('file',fileDom.files[0]);  //添加图片信息的参数
-        this.setState({
-            imgFile:formData
-        })*/
     }
     inputChange=()=>{
         this.setState({
             title:this.textInput.value
         })
     }
-
     // 批量删除
-    batchDelete=(ids)=>{
+    batchDelete = () =>{
         this.setState({
             delState: true,
-            ids
         });
     }
+
     //显示删除页面
     showDelete = (id) =>{
         this.setState({
@@ -235,38 +232,60 @@ class Student extends Component {
     //确认删除
     confirmDelete = () =>{
         let id = this.state.id;
-        // 判断是单条记录删除还是批量删除
-        if (id != null){
+        if (id!=null){
             axios.delete(Api.DELETE+"?id="+id).then((res)=>{
                 if (res.data.success) {
                     alert("删除成功!");
+                    this.props.getStuDynamicList(1,1,10);
                 }else{
                     alert("删除失败,请联络管理员!");
                 }
             });
-        }else {
-            let ids = this.state.ids;
+        } else {
+            let ids = this.state.delIds;
             axios.delete(Api.DELETE+"?id="+ids).then((res)=>{
                 if (res.data.success) {
                     alert("删除成功!");
+                    this.props.getStuDynamicList(1,1,10);
                 }else{
                     alert("删除失败,请联络管理员!");
                 }
-            })
+            });
+
         }
         this.setState({
-            delState: false,
+            delState: false
         });
     }
+
     //取消删除
     cancelDelete = () =>{
         this.setState({
             delState: false,
         });
     }
+
     showModal = () => {
         this.setState({
             visible: true,
+        });
+    }
+    handleUpdateOk=(id)=>{
+        let { content,createTime,title,image }=this.state
+        let updateBody={
+            typeId:3,
+            id,
+            title,
+            content,
+            createTime,
+            image,
+        }
+        this.props.uploadUpdate(updateBody)
+        this.setState({
+            UpdateVisible:false,
+            visible: false,
+            image:'',
+            content:''
         });
     }
     handleOk = () => {
@@ -279,13 +298,21 @@ class Student extends Component {
             image,
         }
         this.props.uploadEditor(body)
-        this.setState({visible: false});
+
+        this.setState({
+            UpdateVisible:false,
+            visible: false,
+            image:'',
+            content:''
+        });
 
     }
     handleCancel = () => {
         this.setState({
             visible: false,
-            UpdateVisible:false
+            UpdateVisible:false,
+            image:'',
+            content:''
         });
     }
 
@@ -295,7 +322,8 @@ class Student extends Component {
 }
 
 const mapStateToProps=(state)=>({
-    stuDynamicList:state.student.stuDynamicList
+    stuDynamicList:state.student.stuDynamicList,
+    pageResult:state.student.pageResult
 })
 
 const mapDispatchToProps=(dispatch)=>({
@@ -304,6 +332,9 @@ const mapDispatchToProps=(dispatch)=>({
     },
     uploadEditor(body){
         dispatch(actionCreators.uploadEditor(body))
+    },
+    uploadUpdate(updateBody){
+        dispatch(actionCreators.uploadUpdate(updateBody))
     }
 })
 
