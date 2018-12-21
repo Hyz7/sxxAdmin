@@ -2,11 +2,14 @@ import * as actionTypes from './actionTypes'
 
 const defaultState={
     newsList:[],
-    update:''
+    update:'',
 }
 
 const getmenulist=(state,action)=>{
-    return Object.assign({},state,{newsList:action.result})
+    return Object.assign({},state,{
+        newsList:action.result.dynamicList,
+        pageResult:action.result.pageResult.total,
+    })
 }
 
 const update=(state,action)=>{

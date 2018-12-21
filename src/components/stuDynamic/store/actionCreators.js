@@ -10,11 +10,19 @@ const upload=(result)=>({
     result,
 })
 
+export const uploadUpdate=(updateBody)=>{
+    return (dispatch)=>{
+        axios.post(Api.UPDATE,updateBody).then(res=>{
+            dispatch(upload(res.data.success))
+        })
+    }
+}
+
 export const getStuDynamicList=(id,page,pageSize)=>{
     return (dispatch)=>{
         axios.get(Api.GET_NEWS_LIST+'?typeId='+id+'&page='+page+'&size='+pageSize).then(res=>{
             console.log(res)
-            dispatch(getList(res.data.dynamicList))
+            dispatch(getList(res.data))
         })
     }
 }

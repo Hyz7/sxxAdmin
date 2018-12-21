@@ -6,14 +6,23 @@ const getList=(result)=>({
     result,
 })
 const upload=(result)=>({
-    type: actionTypes.GET_UPDATE_LIST,
+    type: actionTypes.UPDATE,
     result,
 })
+
+export const uploadUpdate=(updateBody)=>{
+    return (dispatch)=>{
+        axios.post(Api.UPDATE,updateBody).then(res=>{
+            dispatch(upload(res.data.success))
+        })
+    }
+}
 
 export const getIndustryDynamicList=(id,page,pageSize)=>{
     return (dispatch)=>{
         axios.get(Api.GET_NEWS_LIST+'?typeId='+id+'&page='+page+'&size='+pageSize).then(res=>{
-            dispatch(getList(res.data.dynamicList))
+            console.log(res,"-------------------")
+            dispatch(getList(res.data))
         })
     }
 }
