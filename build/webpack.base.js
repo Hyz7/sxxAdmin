@@ -5,6 +5,7 @@ module.exports = {
     entry: ['babel-polyfill','./src/index.js'],
 
     output: {
+        publicPath: '/',
         filename: '[name].[chunkHash:8].js',
         path: path.resolve(__dirname, '../html')
     },

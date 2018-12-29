@@ -20,6 +20,12 @@ class News extends Component {
         }
     }
 
+    componentWillMount() {
+        if(this.props.login){
+            window.location.href='/login'
+        }
+    }
+
     componentDidMount(){
         this.props.getNewsList(1,1,10)
     }
@@ -51,14 +57,13 @@ class News extends Component {
         const columns = [{
             title: '标题',
             dataIndex: 'title',
-            width: 350,
-            minWidth:350,
+            width:150,
             render: text => <a href="javascript:;">{text}</a>,
         }, {
             title: '内容',
             dataIndex: 'content',
-            width: 350,
-            render: text => <div>{text?text.length>200?text.substring(0,200)+'......':null:null}</div>,
+            width: 250,
+            render: text => <div>{text.trim()?text.length>100?text.substring(0,100)+'......':null:null}</div>,
         }, {
             title: '创建时间',
             dataIndex: 'createTime',
@@ -104,12 +109,6 @@ class News extends Component {
                 ['clean']
             ],
         }
-        const  formats = [
-            'header',
-            'bold', 'italic', 'underline', 'strike', 'blockquote',
-            'list', 'bullet', 'indent',
-            'link', 'image'
-        ]
 
         return (
             <div>
@@ -167,8 +166,8 @@ class News extends Component {
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div><ReactQuill value={this.state.content}
-                                    onChange={this.handleChange}
-                                    modules={modules}
+                                                                 onChange={this.handleChange}
+                                                                 modules={modules}
                         />
                     </div>
                 </Modal>
@@ -189,7 +188,7 @@ class News extends Component {
         );
     }
     beforeUpload=(file)=> {
-        const isJPG = file.type === 'image/jpeg' || 'image/png';
+        const isJPG = file.type === 'image/jpeg' || 'image/png'|| 'image/jpg';
         if (!isJPG) {
             message.error('You can upload JPG or PNG file!');
         }
@@ -228,7 +227,7 @@ class News extends Component {
         if (id!=null){
             axios.delete(Api.DELETE+"?id="+id).then((res)=>{
                 if (res.data.success) {
-                    alert("删除成功!");
+                    message.success("删除成功!");
                     this.props.getNewsList(1,1,10);
                 }else{
                     alert("删除失败,请联络管理员!");
@@ -316,7 +315,8 @@ class News extends Component {
 
 const mapStateToProps=(state)=>({
     newsList:state.news.newsList,
-    pageResult:state.news.pageResult
+    pageResult:state.news.pageResult,
+    login:state.news.login
 })
 
 const mapDispatchToProps=(dispatch)=>({

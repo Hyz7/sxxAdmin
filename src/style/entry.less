@@ -73,3 +73,70 @@
   border: 0;
   box-shadow: 0 0 6px rgba(0,0,0,.16);
 }
+
+.login-container{
+  position: relative;
+  min-height: calc(100vh);
+  .login-box{
+    .login-btn{
+      cursor: pointer;
+      width: 150px;
+      height: 36px;
+      background-color: #3782F7;
+      color: #fff;
+      text-align: center;
+      line-height: 36px;
+      margin: 0 auto;
+    }
+    img{
+      margin: 30px auto;
+      width: 200px;
+      height: 60px;
+      display: block;
+    }
+    position: absolute;
+    width: 600px;
+    height: 300px;
+    box-shadow: 0 0 6px rgba(0,0,0,.16);
+    top: 50%;
+    left: 50%;
+    margin-left: -300px;
+    margin-top: -150px;
+    .login-input{
+      width: 280px;
+      margin: 0 auto;
+      .input-box{
+        position: relative;
+        .icon-svg{
+          position: absolute;
+          top: 7px;
+          left: 10px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      input{
+        width: 280px;
+        height: 36px;
+        border: 0;
+        outline: none;
+        box-shadow: 0 0 6px rgba(0,0,0,.16);
+        padding-left: 40px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+.add-download-modal{
+  .ant-modal-content{
+    min-width: 800px!important;
+  }
+  .ant-modal-body{
+    min-width: 800px!important;
+    min-height: 400px;
+    padding-bottom: 40px;
+  }
+}
+.file-style{
+  margin-top: 40px;
+}

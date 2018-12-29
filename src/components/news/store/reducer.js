@@ -3,6 +3,7 @@ import * as actionTypes from './actionTypes'
 const defaultState={
     newsList:[],
     update:'',
+    login:false
 }
 
 const getmenulist=(state,action)=>{
@@ -15,9 +16,11 @@ const getmenulist=(state,action)=>{
 const update=(state,action)=>{
     return Object.assign({},state,{update:action.result})
 }
-/*const updateBody=()=>{
-    return Object.assign({},state,{update:action.result})
-}*/
+
+const login=(state,action)=>{
+    return Object.assign({},state,{login:action.result})
+}
+
 export default (state = defaultState, action)=>{
     switch(action.type){
         case actionTypes.GET_NEWS_LIST:
@@ -27,6 +30,8 @@ export default (state = defaultState, action)=>{
         case actionTypes.UPDATE:
             alert('修改成功！')
             return update(state,action)
+        case actionTypes.LOGIN:
+            return login(state,action)
         default:
             return state
     }
