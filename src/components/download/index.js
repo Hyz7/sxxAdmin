@@ -12,23 +12,62 @@ class Download extends Component {
         addVisible:false,
         image:'',
         content:'',
+        updateVisible:false,
+        dataId:''
     }
     showModal = () => {
-        this.setState({
-            addVisible: true,
-        });
+        this.setState({addVisible: true});
     }
-    handleOk = (e) => {
-        const {content,image,file}=this.state
-        this.setState({
-            addVisible: false,
-        });
+    handleUpdateOk=(id)=>{
+        const {price,dataTitle,content,image,file}=this.state
+        this.setState({updateVisible: false});
 
         let body={
-            dataTitle:this.titleInput.value,
+            dataId:id,
+            dataTitle,
             dataDesc:content,
             image,
-            price:this.priceInput.value,
+            price,
+            industry:'1',
+            type:'免费'
+        }
+
+        let body1=JSON.stringify(body)
+        const formData = new FormData()
+        formData.append('file',file)
+        formData.append('dataEntity',body1)
+
+        axios.post(API.UPDATE_DOWNLOAD_INFO,formData,{headers:{ enctype: "multipart/form-data"}}).then(res=>{
+            this.setState({
+                dataId:'',
+                dataTitle:'',
+                price:'',
+                content:'',
+                image:'',
+                file:''
+            });
+        })
+    }
+    handleUpdate=(record)=>{
+        this.setState({
+            updateVisible:true,
+            dataId:record.dataId,
+            dataTitle:record.dataTitle,
+            price:record.price,
+            content:record.dataDesc,
+            image:record.image,
+
+        })
+    }
+    handleOk = () => {
+        const {dataTitle,price,content,image,file}=this.state
+        this.setState({addVisible: false,});
+
+        let body={
+            dataTitle:dataTitle,
+            dataDesc:content,
+            image,
+            price:price,
             industry:'1',
             type:'免费'
         }
@@ -39,12 +78,25 @@ class Download extends Component {
         formData.append('dataEntity',body1)
 
         axios.post(API.ADD_DOWNLOAD_INFO,formData,{headers:{ enctype: "multipart/form-data"}}).then(res=>{
-            console.log(res)
+            this.setState({
+                dataId:'',
+                dataTitle:'',
+                price:'',
+                content:'',
+                image:'',
+                file:''
+            });
         })
     }
     handleCancel = () => {
         this.setState({
             addVisible: false,
+            updateVisible:false,
+            dataId:'',
+            dataTitle:'',
+            price:'',
+            content:'',
+            image:'',
         });
     }
 
@@ -76,11 +128,13 @@ class Download extends Component {
             title: '内容',
             dataIndex: 'dataDesc',
             key: 'dataDesc',
+            width:'500px'
         },
         {
             title: '价格',
             dataIndex: 'price',
             key: 'price',
+            width:'70px'
         },
         {
             title: '封面',
@@ -97,10 +151,13 @@ class Download extends Component {
         },
         {
             title: '操作',
-            key: 'action',
+            key: 'make',
+            width:'200px',
             render: (text, record) => (
                 <span>
-                    <Button className='primary'>编辑</Button>
+                    <Button className='primary' onClick={()=>{
+                        this.handleUpdate(record)
+                    }}>编辑</Button>
                     <Button className='dangerous' onClick={()=>{
                         this.confirmDelete(record.dataId)
                     }}>删除</Button>
@@ -108,23 +165,6 @@ class Download extends Component {
             ),
         }];
 
-        const props = {
-            name: 'file',
-            action: 'http://192.168.0.101:30000/dynamic/upload',
-            headers: {
-                authorization: 'authorization-text',
-            },
-            onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully`);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} file upload failed.`);
-                }
-            },
-        };
         const modules = {
             toolbar: [
                 [{ 'header': [1, 2, 3, false] }],
@@ -141,7 +181,13 @@ class Download extends Component {
                        className='add-download-modal'
                 >
                     <div className="input-box">
-                        <div className="text">标题:</div><input type="text"  className="input-style title" ref={input=>this.titleInput=input}/>
+                        <div className="text">标题:</div><input type="text"
+                                                              className="input-style title"
+                                                              ref={input=>this.titleInput=input}
+                                                              onChange={()=>{
+                                                                  this.setState({dataTitle:this.titleInput.value})
+                                                              }}
+                    />
                     </div>
                     <div className="input-box">
                         <div className="text">图片:</div>
@@ -154,7 +200,13 @@ class Download extends Component {
                         </div>
                     </div>
                     <div className="input-box">
-                        <div className="text">价格:</div><input type="text"  className="input-style title" ref={input=>this.priceInput=input} />
+                        <div className="text">价格:</div><input type="text"
+                                                              className="input-style title"
+                                                              ref={input=>this.priceInput=input}
+                                                              onChange={()=>{
+                                                                  this.setState({price:this.priceInput.value})
+                                                              }}
+                    />
                     </div>
                     <div className="input-box">
                         <div className="text">描述:</div>
@@ -163,28 +215,63 @@ class Download extends Component {
                                     modules={modules}
                         />
                     </div>
-                    {/*<Upload
-                        ref={file=>this.uploadFile=file}
-                        accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                        customRequest={this.customRequest}
-                        beforeUpload = {this.beforeUpload}
-                        fileList={this.state.fileList}
-                    >
-                        <Button  className='primary'>
-                            <Icon type="upload" /> Click to Upload
-                        </Button>
-                    </Upload>*/}
                     <div className="input-box file-style" >
                         <div className="text">文件上传:</div>
                         <input type="file" ref={ref=>this.uploadfile=ref} onChange={()=>{
-                            console.log(this.uploadfile.files[0])
+                            this.setState({file:this.uploadfile.files[0]})
+                        }}/>
+                    </div>
+                </Modal>
+                <Modal title="编辑白皮书" visible={this.state.updateVisible}
+                       onOk={()=>this.handleUpdateOk(this.state.dataId)} onCancel={this.handleCancel}
+                       className='add-download-modal'
+                >
+                    <div className="input-box">
+                        <div className="text">标题:</div><input type="text"
+                                                              value={this.state.dataTitle}
+                                                              className="input-style title"
+                                                              ref={input=>this.titleInput=input}
+                                                              onChange={()=>{
+                                                                  this.setState({dataTitle:this.titleInput.value})
+                                                              }}
+                    />
+                    </div>
+                    <div className="input-box">
+                        <div className="text">图片:</div>
+                        <div className="img-box">
+                            <img src={this.state.image} alt=""/>
+                            <input accept="image/*" name="img" id="upload_img" type="file"
+                                   onChange={()=>{this.getImg(this.image)}}
+                                   ref={img=>this.image=img}
+                            />
+                        </div>
+                    </div>
+                    <div className="input-box">
+                        <div className="text">价格:</div><input type="text"
+                                                              className="input-style title"
+                                                              value={this.state.price}
+                                                              ref={input=>this.priceInput=input}
+                                                              onChange={()=>{
+                                                                  this.setState({price:this.priceInput.value})
+                                                              }}
+                    />
+                    </div>
+                    <div className="input-box">
+                        <div className="text">描述:</div>
+                        <ReactQuill value={this.state.content}
+                                    onChange={this.handleChange}
+                                    modules={modules}
+                        />
+                    </div>
+                    <div className="input-box file-style" >
+                        <div className="text">文件上传:</div>
+                        <input type="file" ref={ref=>this.uploadfile1=ref} onChange={()=>{
                             this.setState({
-                                file:this.uploadfile.files[0]
+                                file:this.uploadfile1.files[0]
                             })
                         }}/>
                     </div>
                 </Modal>
-
                 <Card title="资料下载管理">
                     <Button type="primary" style={{marginRight:'20px'}} onClick={this.showModal}>新增资料</Button>
                     {/*<Button type="danger">批量删除资料</Button>*/}
@@ -195,7 +282,6 @@ class Download extends Component {
                     // rowSelection={}
                     rowKey={()=>uniqueId()}
                 />
-                {console.log(this.props.downloadList)}
             </div>
         );
     }
@@ -235,4 +321,5 @@ const mapDispatchToProps=(dispatch)=>({
         dispatch(actionCreators.getDownloadList())
     }
 })
+
 export default connect(mapStateToProps,mapDispatchToProps)(Download);
