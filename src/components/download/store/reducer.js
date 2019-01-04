@@ -1,11 +1,15 @@
 import * as actionTypes from '../../../store/actionTypes'
 
 const defaultState={
-    list:[]
+    list:[],
+    pageResult:''
 }
 
 const getlist=(state,action)=>{
-    return Object.assign({},state,{list:action.result.dataEntities})
+    return Object.assign({},state,{
+        list:action.result.dataEntities,
+        pageResult:action.result.pageResult.total,
+    })
 }
 
 

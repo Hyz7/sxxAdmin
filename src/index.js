@@ -12,7 +12,7 @@ import MyHeader from './common/header'
 import MyFooter from './common/footer'
 import 'react-quill/dist/quill.snow.css'
 import './common/icons/iconfont';
-import Login from "./components/login";
+import Login from "./common/login";
 import NoFound from './components/noFound'
 const App=()=>(
     <Provider store={store}>

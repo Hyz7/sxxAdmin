@@ -101,7 +101,7 @@ class Download extends Component {
     }
 
     componentDidMount() {
-        this.props.getDownloadList()
+        this.props.getDownloadList(1,10)
     }
 
     confirmDelete = (id) =>{
@@ -281,6 +281,12 @@ class Download extends Component {
                     dataSource={this.props.downloadList}
                     // rowSelection={}
                     rowKey={()=>uniqueId()}
+                    pagination={false}
+                />
+                <Pagination
+                    onChange={(page,pageSize)=>{this.setState({page:page},()=>{this.props.getDownloadList(this.state.page,pageSize)})}}
+                    defaultCurrent={1} total={this.props.pageResult}
+                    style={{float:'right',marginTop:'20px'}}
                 />
             </div>
         );
@@ -314,11 +320,12 @@ class Download extends Component {
 }
 
 const mapStateToProps=(state)=>({
-    downloadList:state.download.list
+    downloadList:state.download.list,
+    pageResult:state.download.pageResult,
 })
 const mapDispatchToProps=(dispatch)=>({
-    getDownloadList(){
-        dispatch(actionCreators.getDownloadList())
+    getDownloadList(page,pageSize){
+        dispatch(actionCreators.getDownloadList(page,pageSize))
     }
 })
 

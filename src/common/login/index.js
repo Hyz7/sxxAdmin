@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {actionCreators} from '../../components/news/store'
+import {actionCreators} from '../../components/news/store/index'
 import {connect} from 'react-redux'
 // import {actionCreator} from '../../store'
 class Login extends Component {

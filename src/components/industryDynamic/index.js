@@ -66,8 +66,8 @@ class Industry extends Component {
         }, {
             title: '展示图片',
             dataIndex: 'image',
-            width:250,
-            render: url => <img src={url} style={{width:'200px',height:'200px'}}/>,
+            width:100,
+            render: url => <img src={url} style={{width:'100px',height:'100px'}}/>,
         }, {
             title: '分类名称',
             dataIndex: 'typeName',
