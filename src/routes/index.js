@@ -1,7 +1,7 @@
 import React,{Component,Fragment} from 'react'
 import { Route, Switch, Redirect} from 'react-router-dom'
-import AuthRouter from './AuthRouter'
-import Login from '../common/login'
+/*import AuthRouter from './AuthRouter'
+import Login from '../common/login'*/
 import News from '../components/news'
 import Industry from '../components/industryDynamic'
 import Student from '../components/stuDynamic'

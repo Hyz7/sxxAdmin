@@ -27,9 +27,7 @@ export const uploadUpdate=(updateBody)=>{
 export const getNewsList=(id,page,pageSize)=>{
     return (dispatch)=>{
         axios.get(Api.GET_NEWS_LIST+'?typeId='+id+'&page='+page+'&size='+pageSize).then(res=>{
-            // let dataSource = new MatTableDataSource(res.data.dynamicList)
             dispatch(getList(res.data))
-            // this.dataSource = new MatTableDataSource(res.data.yourSubArray);
         })
     }
 }

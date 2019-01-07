@@ -1,6 +1,6 @@
 let env = process.env.NODE_ENV
 
-const HOST = env === 'production'? 'http://52.83.225.97:30000' : 'http://52.83.225.97:30000'
+const HOST = env === 'production'? 'http://52.83.225.97:30000' : 'http://192.168.0.103:30000'
 
 export const GET_MENU_LIST = HOST+'/getTitle'
 

@@ -28,15 +28,16 @@ class Student extends Component {
         this.setState({createTime:dateString})
     }
 
-    handleUpdate=(content)=>{
+    handleUpdate=(record)=>{
         this.setState({
             UpdateVisible:true,
-            id:content.id,
-            oldTitle:content.title,
-            content:content.html,
-            oldCreateTime:content.createTime,
-            oldImage:content.image
+            id:record.id,
+            oldTitle:record.title,
+            content:record.content,
+            oldCreateTime:record.createTime,
+            oldImage:record.image
         })
+        this.textInput.value=record.title
     }
 
     getImgBase64=(imageUrl)=>{
@@ -114,7 +115,7 @@ class Student extends Component {
 
         return (
             <div>
-                <Modal title="编辑新闻" visible={this.state.UpdateVisible}
+                <Modal title="编辑学员动态" visible={this.state.UpdateVisible}
                        onOk={()=>this.handleUpdateOk(this.state.id)} onCancel={this.handleCancel}
                        className='modal-container'
                 >
@@ -144,7 +145,7 @@ class Student extends Component {
                         />
                     </div>
                 </Modal>
-                <Modal title="新增新闻" visible={this.state.visible}
+                <Modal title="新增学员动态" visible={this.state.visible}
                        onOk={this.handleOk} onCancel={this.handleCancel}
                        className='modal-container'
                 >
