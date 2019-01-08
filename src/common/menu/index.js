@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Menu, Icon, Switch } from 'antd';
 const SubMenu = Menu.SubMenu;
-import {Link} from 'react-router-dom'
+import {Link,NavLink} from 'react-router-dom'
 class Menusider extends Component {
     state = {
         theme: 'dark',
@@ -31,13 +31,13 @@ class Menusider extends Component {
                     mode="inline"
                 >
                     <SubMenu key="sub1" title={<span><Icon type="mail" />思学行动态</span>}>
-                        <Menu.Item key="1"><Link to='/news'>新闻资讯</Link></Menu.Item>
-                        <Menu.Item key="2"><Link to='/industry'>行业动态</Link></Menu.Item>
-                        <Menu.Item key="3"><Link to='/study'>学员动态</Link></Menu.Item>
+                        <Menu.Item key="1"><NavLink to='/sxx/home/news' activeClassName='ant-menu-item-selected'>新闻资讯</NavLink></Menu.Item>
+                        <Menu.Item key="2"><NavLink to='/sxx/home/industry' activeClassName='ant-menu-item-selected'>行业动态</NavLink></Menu.Item>
+                        <Menu.Item key="3"><NavLink to='/sxx/home/study' activeClassName='ant-menu-item-selected'>学员动态</NavLink></Menu.Item>
                         {/*<Menu.Item key="4">Option 4</Menu.Item>*/}
                     </SubMenu>
-                    <SubMenu key="sub2" title={<span><Icon type="appstore" />资料下载</span>}>
-                        <Menu.Item key="5"><Link to='/download'>下载列表</Link></Menu.Item>
+                    <SubMenu key="sub2" title={<span><Icon type="appstore"  activeClassName=''/>资料下载</span>}>
+                        <Menu.Item key="5"><NavLink to='/sxx/home/download' activeClassName='ant-menu-item-selected'>下载列表</NavLink></Menu.Item>
                         <Menu.Item key="6">Option 6</Menu.Item>
                         <SubMenu key="sub3" title="Submenu">
                             <Menu.Item key="7">Option 7</Menu.Item>

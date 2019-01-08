@@ -53,6 +53,8 @@ class News extends Component {
         })
     }
 
+
+
     render() {
         const columns = [{
             title: '标题',

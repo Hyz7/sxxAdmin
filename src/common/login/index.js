@@ -2,7 +2,12 @@ import React, {Component} from 'react';
 import {actionCreators} from '../../components/news/store/index'
 import {connect} from 'react-redux'
 // import {actionCreator} from '../../store'
+import { message } from 'antd';
 class Login extends Component {
+    state={
+        username:'',
+        password:''
+    }
     componentWillMount() {
 
     }
@@ -34,21 +39,33 @@ class Login extends Component {
                             </svg>
                         </div>
                         <div className="input-box">
-                            <input type="password" placeholder='请输入管理员密码' onChange={(e)=>{this.inputPassword(e)}}/>
+                            <input type="password" placeholder='请输入管理员密码' onKeyDown={(e)=>{
+                                if( e.keyCode===13){
+                                    this.loginAuth(e)
+                                }
+                            }} onChange={(e)=>{this.inputPassword(e)}}/>
                             <svg className='icon-svg'>
                                 <use xlinkHref='#icon-password_icon'></use>
                             </svg>
                         </div>
                     </div>
-                    <div className="login-btn" onClick={()=>{
-                        this.props.login({username:this.state.username,password:this.state.password})
-                        if(this.props.login){
-                            window.location.href='/news'
-                        }
+                    <div className="login-btn"  onClick={()=>{
+                        this.loginAuth()
                     }}>登陆</div>
                 </div>
             </div>
         );
+    }
+    loginAuth=(e)=>{
+        const {username,password}=this.state
+
+            if(username==='sxx'&&password==='sixuexing'){
+                sessionStorage.setItem("isLogin","1");
+                this.props.history.push('/sxx/home/news');
+            }else{
+                message.error('请输入正确的用户名与密码！');
+            }
+
     }
 }
 const mapStateToProps=(state)=>({

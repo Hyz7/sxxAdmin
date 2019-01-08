@@ -13,31 +13,20 @@ import MyFooter from './common/footer'
 import 'react-quill/dist/quill.snow.css'
 import './common/icons/iconfont';
 import Login from "./common/login";
-import NoFound from './components/noFound'
+import NotFound from './components/noFound'
+
+// import News from "./components/news";
+import Page from './routes/page'
 const App=()=>(
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
-                <Route path='/login' component={Login}></Route>
-                <Layout>
-                    <Sider className='sider-container'>
-                        <Menusider />
-                    </Sider>
-                    <Layout>
-                        <Header>
-                            <MyHeader />
-                        </Header>
-                        <Content>
-                            <MainRoutes/>
-                        </Content>
-                        <Footer>
-                            <MyFooter />
-                        </Footer>
-                    </Layout>
-                </Layout>
-                <Route component={NoFound}/>
-
-
+                <Route path="/" exact component={Login}></Route>
+                <Route path="/login" component={Login}></Route>
+                登录权限控制组件
+                <Route path='/sxx' component={Page}></Route>
+                <Route path="/404" component={NotFound} />
+                <Route component={NotFound}/>
             </Switch>
         </BrowserRouter>
     </Provider>
