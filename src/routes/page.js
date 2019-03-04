@@ -11,6 +11,7 @@ import Industry from '../components/industryDynamic'
 import Student from '../components/stuDynamic'
 import Download from "../components/download";
 import { withRouter } from 'react-router-dom'
+import Media from "../components/Media";
 import NoFound from "../components/noFound";
 class Home extends Component {
     componentDidMount() {
@@ -20,10 +21,11 @@ class Home extends Component {
     render () {
         return (
             <Switch>
-                <AuthRouter path='/sxx/home/news' exact component={News}></AuthRouter>
-                <AuthRouter path='/sxx/home/industry' component={Industry}></AuthRouter>
-                <AuthRouter path='/sxx/home/study' component={Student}></AuthRouter>
-                <AuthRouter path='/sxx/home/download'  component={Download}></AuthRouter>
+                <AuthRouter path='/sxx/home/news' exact component={ News }></AuthRouter>
+                <AuthRouter path='/sxx/home/industry' component={ Industry }></AuthRouter>
+                <AuthRouter path='/sxx/home/study' component={ Student }></AuthRouter>
+                <AuthRouter path='/sxx/home/download'  component={ Download }></AuthRouter>
+                <AuthRouter path='/sxx/home/media'  component={ Media }></AuthRouter>
                 <Route render={() => <Redirect to="/404"/>}/>
             </Switch>
         )
@@ -33,7 +35,6 @@ class Home extends Component {
 class Page extends Component {
     render() {
         return (
-
                 <Layout>
                     <Sider className='sider-container'>
                         <Menusider />

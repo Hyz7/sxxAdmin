@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: ['babel-polyfill','./src/index.js'],
+    entry: ['whatwg-fetch','babel-polyfill','./src/index.js'],
 
     output: {
         publicPath: '/',
@@ -44,8 +44,8 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             title: 'init',
-            template: path.resolve(__dirname,'../index.html'),
-            favicon: './favicon.ico'
+            template: path.resolve(__dirname,'../public/index.html'),
+            favicon: './public/favicon.ico'
         })
     ]
 };

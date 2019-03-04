@@ -1,4 +1,9 @@
-node_modules/
-dist/
-.idea/
 html/
+npm-debug.log*
+.DS_Store
+dist/**
+node_modules/
+bower_components/ef
+.idea
+stats.json
+package-lock.json
