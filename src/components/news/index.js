@@ -164,7 +164,6 @@ class News extends Component {
                                    ref={img=>this.addImage=img}
                             />
                         </div>
-
                     </div>
                     <div className="input-box">
                         <div className="text">内容:</div>

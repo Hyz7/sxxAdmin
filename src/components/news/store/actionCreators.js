@@ -42,7 +42,7 @@ export const uploadEditor=(body)=>{
 }
 
 export const login=(body)=>{
-    console.log(body)
+    // console.log(body)
     return (dispatch)=>{
         axios.post(Api.LOGIN,body).then(res=>{
             dispatch(loginAction(res.data.success))

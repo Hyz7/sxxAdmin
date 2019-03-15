@@ -3,11 +3,13 @@ import {reducer as newsReducer} from '../components/news/store'
 import {reducer as industryReducer} from '../components/industryDynamic/store'
 import {reducer as studentReducer} from '../components/stuDynamic/store'
 import {reducer as downloadReducer} from '../components/download/store'
+import courseReducer from '../store/course/reducer'
 const reducer = combineReducers({
     news:newsReducer,
     industry:industryReducer,
     student:studentReducer,
-    download:downloadReducer
+    download:downloadReducer,
+    course:courseReducer
 })
 
 export default reducer
