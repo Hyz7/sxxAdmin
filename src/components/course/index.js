@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Card , Button, Divider, Form} from 'antd';
 import CourseList from './courseList'
+import SelectCourse from './selectCourse'
+import AddPlan from './addPlan'
 import AddCourse from './addCourse'
 import UpdateCourse from './updateCourse'
 import {connect} from 'react-redux'
@@ -18,6 +20,15 @@ class CourseUpload extends Component {
 
     componentDidMount() {
         this.props.getAllCourse()
+        // this.showAddPlan()
+    }
+
+    showAddPlan=(record)=>{
+        this.addPlan.showAddPlanModal(record)
+    }
+
+    showAddMedia=(record)=>{
+        this.addMedia.showAddMedia(record)
     }
 
     showDrawer = () => {
@@ -37,7 +48,6 @@ class CourseUpload extends Component {
             visibleInfo: true,
             courseInfo:record
         });
-
     };
 
     onInfoClose = () => {
@@ -56,15 +66,27 @@ class CourseUpload extends Component {
                         courseList={this.props.courseList}
                         showInfoDrawer={(record)=>this.showInfoDrawer(record)}
                         getAllCourse={()=>{this.props.getAllCourse()}}
+                        showAddPlan={(record)=>this.showAddPlan(record)}
+                        showAddMedia={(record)=>this.showAddMedia(record)}
                     />
+
                     <AddCourse
                         onClose={()=>this.onClose()}
                         visible={this.state.visible}
                     />
+
                     <UpdateCourse
                         onClose={()=>{this.onInfoClose()}}
                         visible={this.state.visibleInfo}
                         courseInfo={this.state.courseInfo}
+                    />
+
+                    <AddPlan
+                        ref={node=>this.addPlan=node}
+                    />
+
+                    <SelectCourse
+                        ref={node=>this.addMedia=node}
                     />
                 </Card>
             </div>

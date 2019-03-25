@@ -23,4 +23,16 @@ export const DELETE_COURSE_INFO='course/DELETE_COURSE_INFO'
  * @type {string}
  */
 export const UPDATE_COURSE='course/UPDATE_COURSE'
+/**
+ * 获取课程二级目录列表
+ * @type {string}
+ */
+export const COURSE_CATALOGUE='course/COURSE_CATALOGUE'
+/**
+ * 添加课程计划
+ * @type {string}
+ */
+export const ADD_TEACH_PLAN='course/ADD_TEACH_PLAN'
+
+
 

@@ -59,15 +59,37 @@ export const deleteCourseInfo=(id)=>{
         })
     }
 }*/
-const updateCourseList=()=>({
+const updateCourseList=(result)=>({
     type: actionTypes.UPDATE_COURSE,
     result,
 })
 export const updateCourse=(body)=>{
     return (dispatch)=>{
         axios.post(Api.UPDATE_COURSE,body).then(res=>{
-            console.log(res.data)
-            dispatch(updateCourseList(res.data.courseList))
+            if(res.data.success){
+                dispatch(updateCourseList(res.data.courseList))
+                message.success('课程信息修改成功！')
+            }
+        })
+    }
+}
+/**
+ * 获取二级目录
+ * @returns {{type: string, result: (*|{})}}
+ */
+const catalogueList=(result)=>({
+    type: actionTypes.COURSE_CATALOGUE,
+    result,
+})
+export const getTeachPlan=(id)=>{
+    return (dispatch)=>{
+        axios.get(Api.COURSE_CATALOGUE+'?courseId='+id).then(res=>{
+            // console.log(res)
+            if(res.status==200){
+                console.log(res.data)
+                dispatch(catalogueList(res.data.children))
+                // message.success('')
+            }
         })
     }
 }
