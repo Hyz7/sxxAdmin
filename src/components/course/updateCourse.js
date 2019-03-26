@@ -211,7 +211,6 @@ class UpdateCourse extends Component {
     }
 
     saveCourseDetail=(courseInfo)=>{
-
         let formData=new FormData
         formData.append('courseId',this.state.courseInfo.courseId)
         formData.append('courseTitle',this.state.courseTitle?this.state.courseTitle:courseInfo.courseTitle)
@@ -221,8 +220,8 @@ class UpdateCourse extends Component {
         formData.append('courseWatchCount',this.state.courseWatchCount?this.state.courseWatchCount:courseInfo.courseWatchCount)
         formData.append('courseOriginalPrice',this.state.courseOriginalPrice?this.state.courseOriginalPrice:courseInfo.courseOriginalPrice)
         formData.append('courseActivityPrice',this.state.courseActivityPrice?this.state.courseActivityPrice:courseInfo.courseActivityPrice)
-        formData.append('courseTeacherImage',this.state.courseTeacherImage?this.state.courseTeacherImage:'')
-        formData.append('courseImage',this.state.courseImage?this.state.courseImage:'')
+        /*formData.append('courseTeacherImage',this.state.courseTeacherImage?this.state.courseTeacherImage:'')
+        formData.append('courseImage',this.state.courseImage?this.state.courseImage:'')*/
         formData.append('introduce',this.state.introduce?this.state.introduce:courseInfo.courseTitle)
         formData.append('courseIntroduce',this.state.content?this.state.content:courseInfo.content)
 
