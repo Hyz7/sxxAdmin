@@ -88,7 +88,6 @@ class UpdateCourse extends Component {
                             <Col span={12}>
                                 <Form.Item label="授课老师">
                                     <Input placeholder={courseInfo.courseTeacher}
-                                           // defaultValue={courseInfo.courseTeacher}
                                            onChange={(e)=>{this.setState({courseTeacher:e.target.value})}}
                                     />
                                 </Form.Item>
@@ -96,35 +95,11 @@ class UpdateCourse extends Component {
                             <Col span={12}>
                                 <Form.Item label="授课老师介绍">
                                     <Input placeholder={courseInfo.courseTeacherIntroduce}
-                                           // defaultValue={courseInfo.courseTeacherIntroduce}
                                            onChange={(e)=>{this.setState({courseTeacherIntroduce:e.target.value})}}
                                     />
                                 </Form.Item>
                             </Col>
                         </Row>
-                        {/*<Row gutter={16}>
-                            <Col span={12}>
-                                <Form.Item label="课程封面">
-                                    <input accept="image/*" type='file'
-                                           ref={node=>this.courseImage=node}
-                                           onChange={()=>{
-                                               this.setState({courseImage:this.courseImage.files[0]},()=>{console.log(this.state.courseImage)})
-                                           }}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item label="授课老师照片">
-                                    <input type='file'
-                                           accept="image/*"
-                                           ref={node=>this.courseTeacherImage=node}
-                                           onChange={()=>{
-                                               // this.getTeacherImg(this.courseTeacherImage)
-                                               this.setState({courseTeacherImage:this.courseTeacherImage.files[0]})
-                                           }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>*/}
                         <Row gutter={16}>
                             <Col span={12}>
                                 <Form.Item label="课程优惠时间">
@@ -134,7 +109,6 @@ class UpdateCourse extends Component {
                             <Col span={12}>
                                 <Form.Item label="课程观看次数">
                                     <Input placeholder={courseInfo.courseWatchCount}
-                                           // defaultValue={courseInfo.courseWatchCount}
                                            onChange={(e)=>{this.setState({courseWatchCount:e.target.value})}}
                                     />
                                 </Form.Item>
@@ -144,7 +118,6 @@ class UpdateCourse extends Component {
                             <Col span={12}>
                                 <Form.Item label="课程原价">
                                     <Input placeholder={courseInfo.courseOriginalPrice}
-                                           // defaultValue={courseInfo.courseOriginalPrice}
                                            onChange={(e)=>{this.setState({courseOriginalPrice:e.target.value})}}
                                     />
                                 </Form.Item>
@@ -152,7 +125,6 @@ class UpdateCourse extends Component {
                             <Col span={12}>
                                 <Form.Item label="课程折扣价">
                                     <Input placeholder={courseInfo.courseActivityPrice}
-                                           // defaultValue={courseInfo.courseActivityPrice}
                                            onChange={(e)=>{this.setState({courseActivityPrice:e.target.value})}}
                                     />
                                 </Form.Item>
@@ -163,8 +135,6 @@ class UpdateCourse extends Component {
                                 <Form.Item label="介绍">
                                     <Input.TextArea
                                         rows={4}
-                                        // placeholder={courseInfo.introduce}
-                                        // defaultValue={courseInfo.introduce}
                                         onChange={(e)=>{this.setState({introduce:e.target.value})}}
                                     />
                                 </Form.Item>
@@ -178,7 +148,6 @@ class UpdateCourse extends Component {
                                                  onChange={this.handleChange}
                                                  modules={modules}
                                     />
-                                    {/*<Input placeholder="请修改课程详情" defaultValue={courseInfo.courseIntroduce} />*/}
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -211,7 +180,19 @@ class UpdateCourse extends Component {
     }
 
     saveCourseDetail=(courseInfo)=>{
-        let formData=new FormData
+        let body={
+            courseId:this.state.courseInfo.courseId,
+            courseTitle:this.state.courseTitle?this.state.courseTitle:courseInfo.courseTitle,
+            courseSubTitle:this.state.courseSubTitle?this.state.courseSubTitle:courseInfo.courseSubTitle,
+            courseTeacher:this.state.courseTeacher?this.state.courseTeacher:courseInfo.courseTeacher,
+            courseTeacherIntroduce:this.state.courseTeacherIntroduce?this.state.courseTeacherIntroduce:courseInfo.courseTeacherIntroduce,
+            courseWatchCount:this.state.courseWatchCount?this.state.courseWatchCount:courseInfo.courseWatchCount,
+            courseOriginalPrice:this.state.courseOriginalPrice?this.state.courseOriginalPrice:courseInfo.courseOriginalPrice,
+            courseActivityPrice:this.state.courseActivityPrice?this.state.courseActivityPrice:courseInfo.courseActivityPrice,
+            introduce:this.state.introduce?this.state.introduce:courseInfo.courseTitle,
+            courseIntroduce:this.state.content?this.state.content:courseInfo.content
+        }
+        /*let formData=new FormData
         formData.append('courseId',this.state.courseInfo.courseId)
         formData.append('courseTitle',this.state.courseTitle?this.state.courseTitle:courseInfo.courseTitle)
         formData.append('courseSubTitle',this.state.courseSubTitle?this.state.courseSubTitle:courseInfo.courseSubTitle)
@@ -220,16 +201,12 @@ class UpdateCourse extends Component {
         formData.append('courseWatchCount',this.state.courseWatchCount?this.state.courseWatchCount:courseInfo.courseWatchCount)
         formData.append('courseOriginalPrice',this.state.courseOriginalPrice?this.state.courseOriginalPrice:courseInfo.courseOriginalPrice)
         formData.append('courseActivityPrice',this.state.courseActivityPrice?this.state.courseActivityPrice:courseInfo.courseActivityPrice)
-        /*formData.append('courseTeacherImage',this.state.courseTeacherImage?this.state.courseTeacherImage:'')
-        formData.append('courseImage',this.state.courseImage?this.state.courseImage:'')*/
+        /!*formData.append('courseTeacherImage',this.state.courseTeacherImage?this.state.courseTeacherImage:'')
+        formData.append('courseImage',this.state.courseImage?this.state.courseImage:'')*!/
         formData.append('introduce',this.state.introduce?this.state.introduce:courseInfo.courseTitle)
-        formData.append('courseIntroduce',this.state.content?this.state.content:courseInfo.content)
+        formData.append('courseIntroduce',this.state.content?this.state.content:courseInfo.content)*/
 
-        axios.post(Api.UPDATE_COURSE,formData,{
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then(res=>{
+        axios.post(Api.UPDATE_COURSE,body).then(res=>{
             if(res.data.success){
                 message.success('课程信息修改成功！')
                 this.props.getAllCourse()
