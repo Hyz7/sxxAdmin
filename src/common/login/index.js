@@ -3,6 +3,8 @@ import {actionCreators} from '../../components/news/store/index'
 import {connect} from 'react-redux'
 // import {actionCreator} from '../../store'
 import { message } from 'antd';
+
+
 class Login extends Component {
     state={
         username:'',

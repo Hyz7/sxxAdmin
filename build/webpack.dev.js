@@ -1,9 +1,15 @@
 const path = require('path');
 const merge = require('webpack-merge');
-// const autoprefixer = require('autoprefixer');
-const webpack = require('webpack')
+
 const baseConfig = require('./webpack.base.js');
 
+/*const context=['/']
+const test_url='http://52.83.225.97:31400'*/
+/*proxy:[{
+    context: context,
+    target: test_url,
+    secure: false
+}]*/
 module.exports = merge(baseConfig, {
     mode: 'development',
     devtool: 'cheap-module-source-map',

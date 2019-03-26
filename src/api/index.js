@@ -1,6 +1,6 @@
 let env = process.env.NODE_ENV
 
-const HOST = env === 'production'? 'http://52.83.225.97' : 'http://192.168.0.103:31400'
+const HOST = env === 'production'? 'http://52.83.225.97:9090' : 'http://192.168.0.102:31400'
 
 
 export const GET_NEWS_LIST=HOST+'/dynamic/showNewsListByTypeId'
@@ -72,11 +72,16 @@ export const UPDATE_COURSE= HOST+'/course/updateCourse'
  * 获取课程二级目录
  * @type {string}
  */
-export const COURSE_CATALOGUE='/course/findTeachplanList'
+export const COURSE_CATALOGUE=HOST+'/course/findTeachplanList'
 /**
  * 添加课程计划
  * @type {string}
  */
-export const ADD_TEACH_PLAN='/course/addTeachplan'
+export const ADD_TEACH_PLAN=HOST+'/course/addTeachplan'
+/**
+ * 修改课程封面和教师照片
+ * @type {string}
+ */
+export const UPDATE_IMAGE=HOST+'/course/updateCourseImage'
 
 

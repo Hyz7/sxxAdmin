@@ -102,7 +102,7 @@ class UpdateCourse extends Component {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        <Row gutter={16}>
+                        {/*<Row gutter={16}>
                             <Col span={12}>
                                 <Form.Item label="课程封面">
                                     <input accept="image/*" type='file'
@@ -115,6 +115,7 @@ class UpdateCourse extends Component {
                             <Col span={12}>
                                 <Form.Item label="授课老师照片">
                                     <input type='file'
+                                           accept="image/*"
                                            ref={node=>this.courseTeacherImage=node}
                                            onChange={()=>{
                                                // this.getTeacherImg(this.courseTeacherImage)
@@ -123,7 +124,7 @@ class UpdateCourse extends Component {
                                     />
                                 </Form.Item>
                             </Col>
-                        </Row>
+                        </Row>*/}
                         <Row gutter={16}>
                             <Col span={12}>
                                 <Form.Item label="课程优惠时间">
