@@ -37,13 +37,12 @@ class Menusider extends Component {
                     </SubMenu>
                     <SubMenu key="sub2" title={<span><Icon type="appstore" />资料下载</span>}>
                         <Menu.Item key="5"><NavLink to='/sxx/home/download' >下载列表</NavLink></Menu.Item>
-
                     </SubMenu>
                     <SubMenu key="sub4" title={<span><Icon type="setting" />课程上传</span>}>
-                        <Menu.Item key="9"><NavLink to='/sxx/home/media' >课程组件demo</NavLink></Menu.Item>
+                        {/*<Menu.Item key="9"><NavLink to='/sxx/home/media' >课程组件demo</NavLink></Menu.Item>*/}
                         <Menu.Item key="10"><NavLink to='/sxx/home/courseUpload' >课程列表</NavLink></Menu.Item>
-                        <Menu.Item key="11">课程详情</Menu.Item>
-                        <Menu.Item key="12">Option 12</Menu.Item>
+                        {/*<Menu.Item key="11">课程详情</Menu.Item>
+                        <Menu.Item key="12">Option 12</Menu.Item>*/}
                     </SubMenu>
                 </Menu>
             </div>
