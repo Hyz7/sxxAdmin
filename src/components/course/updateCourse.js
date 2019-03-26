@@ -192,19 +192,6 @@ class UpdateCourse extends Component {
             introduce:this.state.introduce?this.state.introduce:courseInfo.courseTitle,
             courseIntroduce:this.state.content?this.state.content:courseInfo.content
         }
-        /*let formData=new FormData
-        formData.append('courseId',this.state.courseInfo.courseId)
-        formData.append('courseTitle',this.state.courseTitle?this.state.courseTitle:courseInfo.courseTitle)
-        formData.append('courseSubTitle',this.state.courseSubTitle?this.state.courseSubTitle:courseInfo.courseSubTitle)
-        formData.append('courseTeacher',this.state.courseTeacher?this.state.courseTeacher:courseInfo.courseTeacher)
-        formData.append('courseTeacherIntroduce',this.state.courseTeacherIntroduce?this.state.courseTeacherIntroduce:courseInfo.courseTeacherIntroduce)
-        formData.append('courseWatchCount',this.state.courseWatchCount?this.state.courseWatchCount:courseInfo.courseWatchCount)
-        formData.append('courseOriginalPrice',this.state.courseOriginalPrice?this.state.courseOriginalPrice:courseInfo.courseOriginalPrice)
-        formData.append('courseActivityPrice',this.state.courseActivityPrice?this.state.courseActivityPrice:courseInfo.courseActivityPrice)
-        /!*formData.append('courseTeacherImage',this.state.courseTeacherImage?this.state.courseTeacherImage:'')
-        formData.append('courseImage',this.state.courseImage?this.state.courseImage:'')*!/
-        formData.append('introduce',this.state.introduce?this.state.introduce:courseInfo.courseTitle)
-        formData.append('courseIntroduce',this.state.content?this.state.content:courseInfo.content)*/
 
         axios.post(Api.UPDATE_COURSE,body).then(res=>{
             if(res.data.success){
