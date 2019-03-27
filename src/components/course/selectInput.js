@@ -19,7 +19,7 @@ class SelectInput extends Component {
         return (
             <Select
                 style={{ width: '100%'}}
-                placeholder="Please select"
+                placeholder="不选择代表课程根节点"
                 onChange={this.handleChange}
                 allowClear={true}
                 labelInValue={true}

@@ -58,13 +58,11 @@ class SelectCourse extends Component {
         this.setState({
             teachplanId:id
         })
-        /*this.teachplanId=id
-        console.log(this.teachplanId)*/
     }
 
     render() {
         const props = {
-            action: 'http://192.168.0.102:31400/media/upload/uploadMediaData?courseId='+this.state.courseId+'&&teachplanId='+this.state.teachplanId,
+            action: 'http://52.83.225.97:9090/media/upload/uploadMediaData?courseId='+this.state.courseId+'&&teachplanId='+this.state.teachplanId,
             onChange({ file, fileList }) {
                 if (file.status !== 'uploading') {
                     console.log(file, fileList);
