@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Input, Modal,Switch,message } from 'antd'
 import axios from 'axios'
-// axios.defaults.baseURL = 'http://192.168.0.103:31400';
 
 import * as API from '../../api'
 import SelectInput from './selectInput'

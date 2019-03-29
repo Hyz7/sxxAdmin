@@ -2,17 +2,18 @@ import React, {Component} from 'react';
 import { Upload, Icon, Button } from 'antd';
 
 
-const props = {
-    action: 'http://192.168.0.102:31400/media/upload/uploadMediaData',
-    onChange({ file, fileList }) {
-        if (file.status !== 'uploading') {
-            console.log(file, fileList);
-        }
-    },
-    defaultFileList: [],
-};
 class uploadMedia extends Component {
+
     render() {
+        const props = {
+            action: 'http://52.83.225.97:9090/media/upload/uploadMediaData?courseId='+this.state.courseId+'&&teachplanId='+this.state.teachplanId,
+            onChange({ file, fileList }) {
+                if (file.status !== 'uploading') {
+                    console.log(file, fileList);
+                }
+            },
+            defaultFileList: [],
+        };
         return (
             <Upload {...props}>
                 <Button>

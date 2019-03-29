@@ -1,6 +1,6 @@
 let env = process.env.NODE_ENV
 
-const HOST = env === 'production'? 'http://52.83.225.97:9090' : 'http://192.168.0.102:31400'
+const HOST = env === 'production'? 'http://52.83.225.97:9090' : 'http://52.83.225.97:9090'
 
 
 export const GET_NEWS_LIST=HOST+'/dynamic/showNewsListByTypeId'

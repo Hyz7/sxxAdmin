@@ -9,7 +9,6 @@ const getList=(result)=>({
 export const getDownloadList=(page,pageSize)=>{
     return (dispatch)=>{
         axios.get(Api.GET_DOWNLOAD_INFO+'?page='+page+'&size='+pageSize).then(res=>{
-            console.log(res.data)
             dispatch(getList(res.data))
         })
     }
