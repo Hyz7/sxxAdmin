@@ -33,6 +33,11 @@ export const COURSE_CATALOGUE='course/COURSE_CATALOGUE'
  * @type {string}
  */
 export const ADD_TEACH_PLAN='course/ADD_TEACH_PLAN'
+/**
+ * 查询banner列表
+ * @type {string}
+ */
+export const GET_BANNER_LIST='banner/GET_BANNER_LIST'
 
 
 

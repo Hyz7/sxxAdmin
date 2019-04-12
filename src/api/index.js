@@ -83,5 +83,15 @@ export const ADD_TEACH_PLAN=HOST+'/course/addTeachplan'
  * @type {string}
  */
 export const UPDATE_IMAGE=HOST+'/course/updateCourseImage'
+/**
+ * 获取banner列表
+ * @type {string}
+ */
+export const GET_BANNER_LIST=HOST+'/bannerManage/banner'
+/**
+ * 删除banner
+ * @type {string}
+ */
+export const DELETE_BANNER=HOST+'/bannerManage/banner'
 
 

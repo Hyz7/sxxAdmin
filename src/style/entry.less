@@ -149,3 +149,41 @@
 .file-style{
   margin-top: 40px;
 }
+
+.bannerList-container{
+  .bannerBox{
+    .bannerImgBox{
+      float: left;
+      position: relative;
+      width: 500px;
+      height: 200px;
+      overflow: hidden;
+      &:hover{
+        .buttonBox{
+          top: 0;
+          transition: all 1s;
+          background-color: rgba(0,0,0,.3);
+        }
+      }
+      .buttonBox{
+        transition: all 1s;
+        width: 500px;
+        height: 200px;
+        position: absolute;
+        top: 200px;
+        padding: 80px 100px;
+        box-sizing: border-box;
+        color: #fff;
+        .ant-btn{
+          margin-right: 20px;
+        }
+      }
+      img{
+        top: 0;
+        width: 500px;
+        height: 200px;
+      }
+    }
+
+  }
+}

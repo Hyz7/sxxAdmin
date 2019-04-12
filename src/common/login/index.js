@@ -60,14 +60,12 @@ class Login extends Component {
     }
     loginAuth=(e)=>{
         const {username,password}=this.state
-
-            if(username==='sxx'&&password==='sixuexing'){
-                sessionStorage.setItem("isLogin","1");
-                this.props.history.push('/sxx/home/news');
-            }else{
-                message.error('请输入正确的用户名与密码！');
-            }
-
+        if(username==='sxx'&&password==='sixuexing'){
+            sessionStorage.setItem("isLogin","1");
+            this.props.history.push('/sxx/home/banner');
+        }else{
+            message.error('请输入正确的用户名与密码！');
+        }
     }
 }
 const mapStateToProps=(state)=>({
