@@ -182,7 +182,14 @@ class News extends Component {
                 >
                     <p>确认要删除吗?</p>
                 </Modal>
-                <Table rowSelection={rowSelection} columns={columns} dataSource={this.props.newsList} rowKey={(newsList)=>newsList.id} key={this.props.newsList.id} pagination={false} />
+                <Table
+                    rowSelection={rowSelection}
+                    columns={columns}
+                    dataSource={this.props.newsList}
+                    rowKey={(newsList)=>newsList.id}
+                    key={this.props.newsList.id}
+                    pagination={false}
+                />
                 <Pagination
                     onChange={(page,pageSize)=>{this.setState({page:page},()=>{this.props.getNewsList(1,this.state.page,pageSize)})}}
                     defaultCurrent={1} total={this.props.pageResult}

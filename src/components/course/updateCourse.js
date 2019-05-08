@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Col, Drawer, Row, Select, Form, Input, DatePicker, message} from "antd";
+const { Option } = Select;
 import connect from "react-redux/es/connect/connect";
 import * as actionCreators from "../../store/course/actionCreators";
 import ReactQuill from 'react-quill';
@@ -11,7 +12,8 @@ class UpdateCourse extends Component {
         super(props)
         this.state={
             content:'',
-            courseInfo:this.props.courseInfo
+            courseInfo:this.props.courseInfo,
+            classify:null
         }
     }
     onChange=(date, dateString)=> {
@@ -30,7 +32,8 @@ class UpdateCourse extends Component {
             courseOriginalPrice:'',
             courseActivityPrice:'',
             introduce:'',
-            content:''
+            content:'',
+            classify:null
         })
     }
 
@@ -131,6 +134,23 @@ class UpdateCourse extends Component {
                             </Col>
                         </Row>
                         <Row gutter={16}>
+                            <Col span={12}>
+                                <Form.Item label="课程分类">
+                                    <Select
+                                        placeholder='请选择课程分类'
+                                        value={this.state.classify}
+                                        style={{ width: '100%' }}
+                                        allowClear={true}
+                                        onChange={this.handleClassifyChange}
+                                    >
+                                        <Option value="0">公开课</Option>
+                                        <Option value="1">视频教程</Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+
+                        </Row>
+                        <Row gutter={16}>
                             <Col span={24}>
                                 <Form.Item label="介绍">
                                     <Input.TextArea
@@ -178,7 +198,9 @@ class UpdateCourse extends Component {
             </div>
         );
     }
-
+    handleClassifyChange=(value)=>{
+        this.setState({classify:value},()=>{console.log(this.state.classify)})
+    }
     saveCourseDetail=(courseInfo)=>{
         let body={
             courseId:this.state.courseInfo.courseId,
@@ -190,7 +212,8 @@ class UpdateCourse extends Component {
             courseOriginalPrice:this.state.courseOriginalPrice?this.state.courseOriginalPrice:courseInfo.courseOriginalPrice,
             courseActivityPrice:this.state.courseActivityPrice?this.state.courseActivityPrice:courseInfo.courseActivityPrice,
             introduce:this.state.introduce?this.state.introduce:courseInfo.courseTitle,
-            courseIntroduce:this.state.content?this.state.content:courseInfo.content
+            courseIntroduce:this.state.content?this.state.content:courseInfo.content,
+            classify:this.state.classify
         }
 
         axios.post(Api.UPDATE_COURSE,body).then(res=>{

@@ -23,7 +23,7 @@ class Banner extends Component {
     handleOk = (e) => {
         let formdata = new FormData
         formdata.append('file',this.state.file)
-        formdata.append('orderBy',this.state.orderBy)
+        formdata.append('orderBy',this.state.orderBy?this.state.orderBy:1)
         formdata.append('bannerDesc',this.state.bannerDesc)
         formdata.append('status',this.state.status?'1':'0')
         axios.post(API.DELETE_BANNER,formdata,{

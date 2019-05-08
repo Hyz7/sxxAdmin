@@ -21,9 +21,9 @@ export const getAllBanner=()=>{
     }
 }
 
-export const deleteBanner=()=>{
+export const deleteBanner=(id)=>{
     return (dispatch)=>{
-        axios.get(Api.DELETE_BANNER).then(res=>{
+        axios.get(Api.DELETE_BANNER+'/'+id).then(res=>{
             dispatch(getBannerList(res.data.bannerList))
         })
     }

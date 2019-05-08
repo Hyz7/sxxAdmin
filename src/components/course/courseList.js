@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { message, Popconfirm, Table,Modal} from "antd";
+import { message, Popconfirm, Table,Modal,Button } from "antd";
 import axios from "axios";
 import * as Api from "../../api";
 
@@ -135,20 +135,10 @@ class CourseList extends Component {
                 </div>
                 )
 
-        },{
-            title: '折扣价格',
-            width:'200px',
-            dataIndex: 'courseActivityPrice',
-            key: 'courseActivityPrice',
-        },{
-            title: '原价',
-            width:'100px',
-            dataIndex: 'courseOriginalPrice',
-            key: 'courseOriginalPrice',
         }, {
             title: '操作',
             key: 'action',
-            width: '310px',
+            width: '410px',
             render: (text, record) => (
                 <div>
                     <Popconfirm title="确定要删除该条数据吗?" onConfirm={(e)=>{
@@ -170,10 +160,18 @@ class CourseList extends Component {
                         e.stopPropagation()
                         this.props.showAddPlan(record)
                     }}>addPlan</a>
-                    <a href="#" onClick={(e)=>{
+                    <a href="#" style={{marginRight:'10px'}}  onClick={(e)=>{
                         e.stopPropagation()
                         this.props.showAddMedia(record)
                     }}>addMedia</a>
+                    <Button type='primary' onClick={(e)=>{
+                        e.stopPropagation()
+                        this.releaseChange(1,record)
+                    }}>发布</Button>
+                    <Button type='danger' onClick={(e)=>{
+                        e.stopPropagation()
+                        this.releaseChange(0,record)
+                    }}>下架</Button>
                 </div>
 
 
@@ -189,6 +187,20 @@ class CourseList extends Component {
 
             </div>
         );
+    }
+    releaseChange=(status,record)=>{
+        let body={
+            courseId:record.courseId,
+            status
+        }
+        axios.post(Api.UPDATE_COURSE,body).then(res=>{
+            if(res.data.success){
+                message.success('操作成功！')
+            }else{
+                message.error('操作失败请重试！')
+            }
+        })
+
     }
 }
 
